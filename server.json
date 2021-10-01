@@ -1,23 +1,34 @@
 {
-    "name": "Acurite",
-    "docs": "https://github.com/Einstein42/udi-poly-template-python",
-    "type": "python3",
-    "executable": "udi-acurite-poly.py",
-    "install": "install.sh",
-    "install_cloud": "install_cloud.sh",
-    "description": "Acurite Node Server",
-    "notice": "Your disclaimer here",
-    "shortPoll": "120",
-    "longPoll": "240",
-    "testMode": true,
-    "credits": [
-        {
-            "title": "mypoly: a NodeServer for Template Integration",
-            "author": "James Milne (Einstein.42)",
-            "version": "2.0.5",
-            "date": "November 8, 2017",
-            "source": "https://github.com/Einstein42/udi-poly-template-python",
-            "license": "https://raw.githubusercontent.com/Einstein42/udi-poly-template-python/master/LICENSE"
-        }
+  "name": "Acurite",
+  "docs": "https://github.com/jamespauly/udi-acurite-poly",
+  "type": "python3",
+  "executable": "udi-acurite-poly.py",
+  "install": "install.sh",
+  "install_cloud": "install_cloud.sh",
+  "description": "Acurite Node Server",
+  "notice": "",
+  "shortPoll": "120",
+  "longPoll": "240",
+  "profile_version": "2.0.0",
+  "devMode": true,
+  "credits": [
+    {
+      "title": "Daikin: A Node Server for Controlling Diakin Mini-Splits",
+      "author": "James Paul",
+      "version": "2.0.1",
+      "date": "July 16th, 2021",
+      "source": "https://github.com/jamespauly/udi-acurite-poly.git",
+      "license": "https://github.com/jamespauly/udi-acurite-poly/blob/main/LICENSE"
+    }
+  ],
+  "store": {
+    "developer": "jgpaul16@gmail.com",
+    "purchaseOptions": [
+      {
+        "isTrial": true,
+        "isPerpetual": true,
+        "price": 5.00
+      }
     ]
+  }
 }
