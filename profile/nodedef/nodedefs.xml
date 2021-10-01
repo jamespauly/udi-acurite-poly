@@ -1,0 +1,30 @@
+<nodeDefs>
+    <!-- NODE DEF from 5.0 document http://wiki.universal-devices.com/index.php?title=V50_MAIN -->
+    <!-- controller, this must mach the id in your Controller class-->
+    <nodeDef id="controller" nls="ctl">
+        <editors/>
+        <sts>
+			<st id="ST" editor="bool" />
+		</sts>
+        <cmds>
+            <sends/>
+            <accepts>
+              <cmd id="DISCOVER"/>
+            </accepts>
+        </cmds>
+    </nodeDef>
+	<!-- Acurite Master -->
+    <nodeDef id="acuritedevice" nls="device">
+        <editors/>
+        <sts>
+            <st id="GV0" editor="temp" />
+            <st id="GV1" editor="humidity" />
+        </sts>
+        <cmds>
+            <sends/>
+            <accepts>
+                <cmd id="QUERY"/>
+            </accepts>
+        </cmds>
+    </nodeDef>
+</nodeDefs>

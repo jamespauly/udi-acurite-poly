@@ -1,0 +1,12 @@
+<editors>
+    <!-- Boolean -->
+    <editor id="bool">
+        <range uom="2" subset="0,1" />
+    </editor>
+    <editor id="temp">
+        <range uom="17" />
+    </editor>
+    <editor id="humidity">
+        <range uom="22" />
+    </editor>
+</editors>
