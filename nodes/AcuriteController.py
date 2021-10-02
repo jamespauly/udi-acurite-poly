@@ -5,6 +5,7 @@ import requests
 import json
 
 import udi_interface
+from nodes import AcuriteDeviceNode
 
 LOGGER = udi_interface.LOGGER
 Custom = udi_interface.Custom
@@ -22,10 +23,10 @@ class AcuriteController(udi_interface.Node):
 
         self.Parameters = Custom(polyglot, 'customparams')
 
-        self.poly.subscribe(self.poly.START, self.start, address)
-        self.poly.subscribe(self.poly.POLL, self.poll)
         self.poly.subscribe(self.poly.CONFIG, self.configHandler)
         self.poly.subscribe(self.poly.CUSTOMPARAMS, self.parameterHandler)
+        self.poly.subscribe(self.poly.START, self.start, address)
+        self.poly.subscribe(self.poly.POLL, self.poll)
         self.poly.subscribe(self.poly.ADDNODEDONE, self.nodeHandler)
 
         self.poly.ready()
@@ -33,9 +34,7 @@ class AcuriteController(udi_interface.Node):
 
     def start(self):
         LOGGER.info('Started udi-acurite-poly NodeServer')
-        self.check_params()
         self.discover()
-        self.poly.subscribe(self.poly.CUSTOMPARAMS, self.parameter_handler)
 
     def configHandler(self, config):
         # at this time the interface should have all the nodes
@@ -49,7 +48,7 @@ class AcuriteController(udi_interface.Node):
     def nodeHandler(self, data):
         self.node_added_count += 1
 
-    def parameter_handler(self, params):
+    def parameterHandler(self, params):
         self.Parameters.load(params)
 
         userValid = False
@@ -141,7 +140,7 @@ class AcuriteController(udi_interface.Node):
                             humidity = sensor['last_reading_value']
                             uom = sensor['chart_unit']
                     
-                    self.poly.addNode(AcuriteDevice(self.poly, self.address, deviceName + '-' + deviceModel, deviceName, devicePlacement, deviceStatus, temp, humidity), update)
+                    self.poly.addNode(AcuriteDeviceNode(self.poly, self.address, deviceName + '-' + deviceModel, deviceName, devicePlacement, deviceStatus, temp, humidity))
 
             #self.add_hub(hubId, hubName, tokenId, accountCity, accountState, accountId, update)
             #self.addNode(AcuriteMaster(self, accountId, accountId, accountId, "Acurite Access", accountCity, accountState, accountId, statusCode), update)
@@ -169,40 +168,6 @@ class AcuriteController(udi_interface.Node):
     def stop(self):
         LOGGER.info('Stopping Acurite NodeServer.')
 
-    def process_config(self, config):
-        # this seems to get called twice for every change, why?
-        # What does config represent?
-        LOGGER.info("process_config: Enter config={}".format(config));
-        LOGGER.info("process_config: Exit");
-
-    def check_params(self):
-        try:
-            if 'user' in self.polyConfig['customParams']:
-                self.user = self.polyConfig['customParams']['user']
-                LOGGER.info('Custom user specified: {}'.format(self.user))
-            else:
-                LOGGER.error('Please provide user in custom parameters')
-                return False
-
-            if 'password' in self.polyConfig['customParams']:
-                self.password = self.polyConfig['customParams']['password']
-                LOGGER.info('Password specified')
-            else:
-                LOGGER.error('Please provide password in custom parameters')
-                return False
-        except Exception as ex:
-            LOGGER.error('Error Starting Acurite NodeServer: %s', str(ex))
-            return False
-
     id = 'acurite'
     commands = {'DISCOVER': discover}
     drivers = [{'driver': 'ST', 'value': 0, 'uom': 2}]
-
-if __name__ == "__main__":
-    try:
-        polyglot = polyinterface.Interface('Acurite')
-        polyglot.start()
-        control = Controller(polyglot)
-        control.runForever()
-    except (KeyboardInterrupt, SystemExit):
-        sys.exit(0)
