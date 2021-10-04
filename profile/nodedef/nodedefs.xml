@@ -4,21 +4,25 @@
     <nodeDef id="controller" nls="ctl">
         <editors/>
         <sts>
-			<st id="ST" editor="bool" />
-		</sts>
+            <st id="ST" editor="bool"/>
+        </sts>
         <cmds>
             <sends/>
             <accepts>
-              <cmd id="DISCOVER"/>
+                <cmd id="DISCOVER"/>
+                <cmd id="REMOVE_NOTICES_ALL"/>
             </accepts>
         </cmds>
     </nodeDef>
-	<!-- Acurite Master -->
+    <!-- Acurite Master -->
     <nodeDef id="acuritedevice" nls="device">
         <editors/>
         <sts>
-            <st id="GV0" editor="temp" />
-            <st id="GV1" editor="humidity" />
+            <st id="CLITEMP" editor="I_CLITEMP_F"/>
+            <st id="CLIHUM" editor="I_CLIHUM"/>
+            <st id="DEWPT" editor="I_DEWPT_F"/>
+            <st id="BARPRES" editor="I_BARPRES"/>
+            <st id="BATLVL" editor="I_BATLVL"/>
         </sts>
         <cmds>
             <sends/>
