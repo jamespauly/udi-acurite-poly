@@ -9,8 +9,12 @@
   "notice": "",
   "shortPoll": "120",
   "longPoll": "240",
-  "profile_version": "2.0.0",
+  "profile_version": "3.0.0",
   "devMode": true,
+  "customParams": {
+		"acurite_user": "jgpaul16@gmail.com",
+		"acurite_password": "my secret password"
+	},
   "credits": [
     {
       "title": "Daikin: A Node Server for Controlling Diakin Mini-Splits",
