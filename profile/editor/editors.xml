@@ -16,6 +16,9 @@
         <range uom="17" min="0" max="150" step="1" prec="0"/>
     </editor>
     <editor id="I_BATLVL">
-        <range uom="0"/>
+        <range subset="0-1" uom="25" nls="IX_BATTERY_LEVEL"/>
+    </editor>
+    <editor id="I_DEVICE_STATUS">
+        <range subset="0-2" uom="25" nls="IX_DEVICE_STATUS"/>
     </editor>
 </editors>

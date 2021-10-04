@@ -1,6 +1,6 @@
 # controller
 ND-acurite-NAME = Acurite NodeServer Controller
-ND-acurite-ICON = TempSensor
+ND-acurite-ICON = Weather
 CMD-ctl-DISCOVER-NAME = Discover
 CMD-ctl-REMOVE_NOTICES_ALL-NAME = Remove Notices
 ST-ctl-ST-NAME = NodeServer Online
@@ -13,22 +13,19 @@ ST-ctl-ST-NAME = NodeServer Online
 #CMD-acrdev-HUMIDITY-NAME = Humidity
 
 # Device Node
-ND-acuritedevice-NAME = Acurity Device
+ND-acuritedevice-NAME = Acurite Device
 ND-acuritedevice-ICON = TempSensor
 ST-device-CLITEMP-NAME = Temperature
 ST-device-CLIHUM-NAME = Relative Humidity
 ST-device-BARPRES-NAME = Barametric Pressure
 ST-device-DEWPT-NAME = Dew Point
-ST-device-BATLVL-NAME = Battery Level
+ST-device-GV1-NAME = Battery Level
 CMD-device-QUERY-NAME = Refresh
 
-#IX_DEVICE_PLACE-1 = Outside
-#IX_DEVICE_PLACE-2 = Inside
+IX_BATTERY_LEVEL-0 = Normal
+IX_BATTERY_LEVEL-1 = Low
 
-#IX_BATTERY_LEVEL-1 = Normal
-#IX_BATTERY_LEVEL-2 = Low
-
-#IX_DEVICE_STATUS-1 = Green
-#IX_DEVICE_STATUS-2 = Yellow
-#IX_DEVICE_STATUS-3 = Red
+IX_DEVICE_STATUS-0 = Green
+IX_DEVICE_STATUS-1 = Yellow
+IX_DEVICE_STATUS-2 = Red
 

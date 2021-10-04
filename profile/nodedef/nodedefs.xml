@@ -22,7 +22,8 @@
             <st id="CLIHUM" editor="I_CLIHUM"/>
             <st id="DEWPT" editor="I_DEWPT_F"/>
             <st id="BARPRES" editor="I_BARPRES"/>
-            <st id="BATLVL" editor="I_BATLVL"/>
+            <st id="GV1" editor="I_BATLVL"/>
+            <st id="GV2" editor="I_DEVICE_STATUS"/>
         </sts>
         <cmds>
             <sends/>

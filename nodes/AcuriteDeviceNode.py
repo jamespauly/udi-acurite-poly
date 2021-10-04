@@ -1,4 +1,5 @@
 import udi_interface
+from enums import DeviceStatus, BatteryLevel
 
 LOGGER = udi_interface.LOGGER
 
@@ -26,6 +27,7 @@ class AcuriteDeviceNode(udi_interface.Node):
     def update(self):
         deviceName = self.device['name']
         deviceBattery = self.device['battery_level']
+        deviceStatus = self.device['status_code']
         temp = ''
         humidity = ''
         dewPoint = ''
@@ -54,7 +56,8 @@ class AcuriteDeviceNode(udi_interface.Node):
             self.setDriver('CLIHUM', humidity)
             self.setDriver('BARPRES', barometric)
             self.setDriver('DEWPT', dewPoint)
-            self.setDriver('BATLVL', deviceBattery)
+            self.setDriver('GV1', BatteryLevel[deviceBattery].value)
+            self.setDriver('GV2', DeviceStatus[deviceStatus].value)
         except Exception as ex:
             LOGGER.error('AcuriteDeviceNode - Error in update', ex)
 
@@ -64,6 +67,7 @@ class AcuriteDeviceNode(udi_interface.Node):
                 {'driver': 'CLIHUM', 'value': 0, 'uom': '22'},
                {'driver': 'BARPRES', 'value': 0, 'uom': '23'},
                {'driver': 'DEWPT', 'value': 0, 'uom': '17'},
-               {'driver': 'BATLVL', 'value': 'Normal', 'uom': '0'}]
+               {'driver': 'GV1', 'value': 0, 'uom': '25'},
+               {'driver': 'GV2', 'value': 0, 'uom': '25'}]
     
     commands = {'QUERY': query}
