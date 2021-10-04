@@ -4,6 +4,7 @@ import json
 
 import udi_interface
 from nodes import AcuriteDeviceNode
+from acurite import AcuriteManager
 
 LOGGER = udi_interface.LOGGER
 Custom = udi_interface.Custom
@@ -95,54 +96,8 @@ class AcuriteController(udi_interface.Node):
 
     def discover(self, *args, **kwargs):
         try:
-            LOGGER.info("Starting Acurite Device Discovery")
-            LOGGER.info('acurite_user: {}'.format(self.Parameters['acurite_user']))
-
-            loginHeaders = {'Content-Type': 'application/json'}
-            loginData = json.dumps(
-                {'email': self.Parameters['acurite_user'], 'password': self.Parameters['acurite_password']})
-            loginResp = requests.post('https://marapi.myacurite.com/users/login', data=loginData, headers=loginHeaders)
-            loginRespJO = loginResp.json()
-
-            statusCode = loginResp.status_code
-            if statusCode != 200:
-                return
-
-            LOGGER.info('Login HTTP Status Code: {}'.format(str(statusCode)))
-            LOGGER.debug(json.dumps(loginRespJO))
-            accountId = loginRespJO['user']['account_users'][0]['account_id']
-            tokenId = loginRespJO['token_id']
-
-            hubHeaders = {'Content-Type': 'application/json', 'X-ONE-VUE-TOKEN': tokenId}
-            hubResp = requests.get('https://marapi.myacurite.com/accounts/{}/dashboard/hubs'.format(str(accountId)),
-                                   headers=hubHeaders)
-            hubsRespJO = hubResp.json()
-            hubId = hubsRespJO['account_hubs'][0]['id']
-            hubName = hubsRespJO['account_hubs'][0]['name']
-
-            deviceHeaders = {'Content-Type': 'application/json', 'X-ONE-VUE-TOKEN': tokenId}
-            deviceResp = requests.get(
-                'https://marapi.myacurite.com/accounts/{}/dashboard/hubs/{}'.format(str(accountId), str(hubId)),
-                headers=deviceHeaders)
-            deviceRespJO = deviceResp.json()
-            LOGGER.debug(json.dumps(deviceRespJO))
-
-            LOGGER.info('Got Acurite Devices')
-
-            for device in deviceRespJO['devices']:
-                if device is not None:
-                    deviceId = device['id']
-                    deviceName = device['name']
-
-                    LOGGER.debug('Device Id: {}'.format(deviceId))
-                    LOGGER.debug('Device Name: {}'.format(deviceName))
-
-                    if self.poly.getNode(deviceId) is None:
-                        self.poly.addNode(
-                            AcuriteDeviceNode(self.poly, self.address, deviceId, deviceName,
-                                              device))
-                    else:
-                        LOGGER.info('Node {} already exists, skipping'.format(deviceId))
+            acuriteManager = AcuriteManager(self.poly)
+            acuriteManager.getHubDevices()
 
         except Exception as ex:
             LOGGER.error("AcuriteController - Discovery failed with error", ex)

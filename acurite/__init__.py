@@ -1,0 +1,1 @@
+from .AcuriteManager import AcuriteManager
