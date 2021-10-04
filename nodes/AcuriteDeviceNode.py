@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 import udi_interface
 from enums import DeviceStatus, BatteryLevel
 
@@ -23,11 +25,19 @@ class AcuriteDeviceNode(udi_interface.Node):
         else:
             LOGGER.info('longPoll (controller)')
             pass
-        
+
+    def convert_timedelta_min(self, duration):
+        days, seconds = duration.days, duration.seconds
+        hours = seconds // 3600
+        minutes = (seconds % 3600) // 60
+        # seconds = (seconds % 60)
+        return (days * 24 * 60) + (hours * 60) + minutes
+
     def update(self):
         deviceName = self.device['name']
         deviceBattery = self.device['battery_level']
         deviceStatus = self.device['status_code']
+        deviceLastCheckIn = self.device['last_check_in_at']
         temp = ''
         humidity = ''
         dewPoint = ''
@@ -52,6 +62,15 @@ class AcuriteDeviceNode(udi_interface.Node):
                 LOGGER.debug('Device Name: {}, Sensor Dew Point: {}{}'.format(deviceName, barometric, barometricUOM))
 
         try:
+            if deviceLastCheckIn is not None and deviceLastCheckIn != '':
+                lastCheckInDateTime = datetime.fromisoformat(deviceLastCheckIn)
+                currentDateTimeInUtc = datetime.now(timezone.utc)
+                deltaDateTime = currentDateTimeInUtc - lastCheckInDateTime
+                numOfMins = self.convert_timedelta_min(deltaDateTime)
+                self.setDriver('GV3', numOfMins)
+            else:
+                self.setDriver('GV3', 0)
+
             self.setDriver('CLITEMP', temp)
             self.setDriver('CLIHUM', humidity)
             self.setDriver('BARPRES', barometric)
@@ -68,6 +87,7 @@ class AcuriteDeviceNode(udi_interface.Node):
                {'driver': 'BARPRES', 'value': 0, 'uom': '23'},
                {'driver': 'DEWPT', 'value': 0, 'uom': '17'},
                {'driver': 'GV1', 'value': 0, 'uom': '25'},
-               {'driver': 'GV2', 'value': 0, 'uom': '25'}]
+               {'driver': 'GV2', 'value': 0, 'uom': '25'},
+               {'driver': 'GV3', 'value': 0, 'uom': '45'}]
     
     commands = {'QUERY': query}

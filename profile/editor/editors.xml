@@ -21,4 +21,7 @@
     <editor id="I_DEVICE_STATUS">
         <range subset="0-2" uom="25" nls="IX_DEVICE_STATUS"/>
     </editor>
+        <editor id="I_LAST_UPDATE">
+        <range uom="45" min="0" max="100000"/>
+    </editor>
 </editors>

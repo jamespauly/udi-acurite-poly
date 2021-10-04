@@ -24,6 +24,7 @@
             <st id="BARPRES" editor="I_BARPRES"/>
             <st id="GV1" editor="I_BATLVL"/>
             <st id="GV2" editor="I_DEVICE_STATUS"/>
+            <st id="GV3" editor="I_LAST_UPDATE"/>
         </sts>
         <cmds>
             <sends/>

@@ -5,13 +5,6 @@ CMD-ctl-DISCOVER-NAME = Discover
 CMD-ctl-REMOVE_NOTICES_ALL-NAME = Remove Notices
 ST-ctl-ST-NAME = NodeServer Online
 
-# mynodetype
-#ND-acuritedevice-NAME = Acurite Master
-#ND-acuritedevice-ICON = GenericRsp
-#ST-acrdev-ST-NAME = Status
-#CMD-acrdev-TEMP-NAME = Temperature
-#CMD-acrdev-HUMIDITY-NAME = Humidity
-
 # Device Node
 ND-acuritedevice-NAME = Acurite Device
 ND-acuritedevice-ICON = TempSensor
@@ -20,6 +13,8 @@ ST-device-CLIHUM-NAME = Relative Humidity
 ST-device-BARPRES-NAME = Barametric Pressure
 ST-device-DEWPT-NAME = Dew Point
 ST-device-GV1-NAME = Battery Level
+ST-device-GV2-NAME = Device Status
+ST-device-GV3-NAME = Minutes Since Last Update
 CMD-device-QUERY-NAME = Refresh
 
 IX_BATTERY_LEVEL-0 = Normal

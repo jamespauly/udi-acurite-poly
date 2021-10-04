@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-import sys
-import time
 import requests
 import json
 
@@ -25,30 +23,30 @@ class AcuriteController(udi_interface.Node):
         self.Notices = Custom(polyglot, 'notices')
         self.Parameters = Custom(polyglot, 'customparams')
 
-        self.poly.subscribe(self.poly.CONFIG, self.configHandler)
+        # self.poly.subscribe(self.poly.CONFIG, self.configHandler)
         self.poly.subscribe(self.poly.CUSTOMPARAMS, self.parameterHandler)
         self.poly.subscribe(self.poly.START, self.start, address)
         self.poly.subscribe(self.poly.POLL, self.poll)
-        self.poly.subscribe(self.poly.ADDNODEDONE, self.nodeHandler)
+        # self.poly.subscribe(self.poly.ADDNODEDONE, self.nodeHandler)
 
         self.poly.ready()
         self.poly.addNode(self)
 
     def start(self):
         LOGGER.info('Started udi-acurite-poly NodeServer')
-        # self.discover()
-
-    def configHandler(self, config):
+        self.query()
+    #
+    # def configHandler(self, config):
         # at this time the interface should have all the nodes
         # included from the database.  Here's where we could
         # loop through those and create wrapped versions.
         # LOGGER.info('handle config = {}'.format(config))
-        nodes = self.poly.getNodes()
-        for n in nodes:
-            LOGGER.info('Found node {} = {}'.format(n, nodes[n]))
+        # nodes = self.poly.getNodes()
+        # for n in nodes:
+        #     LOGGER.info('Found node {} = {}'.format(n, nodes[n]))
 
-    def nodeHandler(self, data):
-        self.node_added_count += 1
+    # def nodeHandler(self, data):
+    #     self.node_added_count += 1
 
     def parameterHandler(self, params):
         self.Parameters.load(params)
@@ -56,12 +54,15 @@ class AcuriteController(udi_interface.Node):
         userValid = False
         passwordValid = False
 
-        if self.Parameters['acurite_user'] is not None and len(self.Parameters['acurite_user']) > 0:
+        acuriteUser = self.Parameters['acurite_user']
+        acuritePassword = self.Parameters['acurite_password']
+
+        if acuriteUser is not None and len(acuriteUser) > 0:
             userValid = True
         else:
             LOGGER.error('Acurite User is Blank')
 
-        if self.Parameters['acurite_password'] is not None and len(self.Parameters['acurite_password']) > 0:
+        if acuritePassword is not None and len(acuritePassword) > 0:
             passwordValid = True
         else:
             LOGGER.error('Acurite Password is Blank')
@@ -69,7 +70,11 @@ class AcuriteController(udi_interface.Node):
         self.Notices.clear()
 
         if userValid and passwordValid:
+            self.configured = True
             self.discover();
+            for node in self.poly.nodes:
+                if self.poly.nodes[node] is not self:
+                    self.poly.nodes[node].query()
         else:
             if not userValid:
                 self.Notices['user'] = 'Acurite User must be configured.'
@@ -86,11 +91,10 @@ class AcuriteController(udi_interface.Node):
 
     def query(self):
         for node in self.poly.nodes:
-            self.poly.nodes[node].reportDrivers()
+            self.poly.nodes[node].query()
 
     def discover(self, *args, **kwargs):
         try:
-            self.discovery = True
             LOGGER.info("Starting Acurite Device Discovery")
             LOGGER.info('acurite_user: {}'.format(self.Parameters['acurite_user']))
 
@@ -133,9 +137,12 @@ class AcuriteController(udi_interface.Node):
                     LOGGER.debug('Device Id: {}'.format(deviceId))
                     LOGGER.debug('Device Name: {}'.format(deviceName))
 
-                    self.poly.addNode(
-                        AcuriteDeviceNode(self.poly, self.address, deviceId, deviceName,
-                                          device))
+                    if self.poly.getNode(deviceId) is None:
+                        self.poly.addNode(
+                            AcuriteDeviceNode(self.poly, self.address, deviceId, deviceName,
+                                              device))
+                    else:
+                        LOGGER.info('Node {} already exists, skipping'.format(deviceId))
 
         except Exception as ex:
             LOGGER.error("AcuriteController - Discovery failed with error", ex)
