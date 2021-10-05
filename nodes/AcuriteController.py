@@ -9,7 +9,6 @@ from acurite import AcuriteManager
 LOGGER = udi_interface.LOGGER
 Custom = udi_interface.Custom
 
-
 class AcuriteController(udi_interface.Node):
     def __init__(self, polyglot, primary, address, name):
         super(AcuriteController, self).__init__(polyglot, primary, address, name)
@@ -34,21 +33,10 @@ class AcuriteController(udi_interface.Node):
         self.poly.addNode(self)
 
     def start(self):
-        LOGGER.info('Started udi-acurite-poly NodeServer')
+        self.poly.updateProfile()
+        self.poly.setCustomParamsDoc()
         self.query()
-
-    #
-    # def configHandler(self, config):
-    # at this time the interface should have all the nodes
-    # included from the database.  Here's where we could
-    # loop through those and create wrapped versions.
-    # LOGGER.info('handle config = {}'.format(config))
-    # nodes = self.poly.getNodes()
-    # for n in nodes:
-    #     LOGGER.info('Found node {} = {}'.format(n, nodes[n]))
-
-    # def nodeHandler(self, data):
-    #     self.node_added_count += 1
+        LOGGER.info('Started udi-acurite-poly NodeServer')
 
     def parameterHandler(self, params):
         self.Parameters.load(params)

@@ -19,7 +19,7 @@ if __name__ == "__main__":
         LOG_HANDLER.set_basic_config(True, logging.DEBUG)
         polyglot = udi_interface.Interface([AcuriteController, AcuriteDeviceNode])
         polyglot.start()
-        control = AcuriteController(polyglot, 'controller', 'controller', 'Acurite Controller')
+        control = AcuriteController(polyglot, 'controller', 'controller', 'Acurite Hub')
         polyglot.runForever()
     except (KeyboardInterrupt, SystemExit):
         polyglot.stop()

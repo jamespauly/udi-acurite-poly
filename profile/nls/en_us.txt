@@ -15,7 +15,6 @@ ST-device-DEWPT-NAME = Dew Point
 ST-device-GV1-NAME = Battery Level
 ST-device-GV2-NAME = Device Status
 ST-device-GV3-NAME = Minutes Since Last Update
-CMD-device-QUERY-NAME = Refresh
 
 IX_BATTERY_LEVEL-0 = Normal
 IX_BATTERY_LEVEL-1 = Low

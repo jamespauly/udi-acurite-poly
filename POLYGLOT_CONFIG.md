@@ -1,4 +1,4 @@
+# Acurite Node Server Custom Parameters
 
-# This is POLYGLOT_CONFIG.md
-
-This should have any description about how to configure your nodeserver.
+* <b>acurite_user</b> - myacurite.com username
+* <b>acurite_password</b> - myacurite.com password

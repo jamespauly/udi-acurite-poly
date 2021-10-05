@@ -28,9 +28,7 @@
         </sts>
         <cmds>
             <sends/>
-            <accepts>
-                <cmd id="QUERY"/>
-            </accepts>
+            <accepts/>
         </cmds>
     </nodeDef>
 </nodeDefs>

@@ -2,50 +2,22 @@ from datetime import datetime, timezone
 
 import udi_interface
 from enums import DeviceStatus, BatteryLevel
-from acurite import AcuriteManager
 
 LOGGER = udi_interface.LOGGER
 Custom = udi_interface.Custom
+
 
 class AcuriteDeviceNode(udi_interface.Node):
     def __init__(self, polyglot, primary, address, name, device):
         super(AcuriteDeviceNode, self).__init__(polyglot, primary, address, name)
         self.poly.subscribe(self.poly.START, self.start, address)
-        self.poly.subscribe(self.poly.POLL, self.poll)
-        self.poly.subscribe(self.poly.CUSTOMPARAMS, self.parameterHandler)
-
         self.initDevice = device
-        self.Parameters = Custom(polyglot, 'customparams')
 
     def start(self):
         self.update(self.initDevice)
 
-    def parameterHandler(self, params):
-        self.Parameters.load(params)
-        
     def query(self):
-        # acuriteUser = self.Parameters['acurite_user']
-        # acuritePassword = self.Parameters['acurite_password']
-        acuriteUser = 'jgpaul16@gmail.com'
-        acuritePassword = 'zcKCh9@G4IZB'
-
-        LOGGER.info('From node query: ' + acuriteUser)
-
-        # acuriteManager = AcuriteManager(acuriteUser, acuritePassword)
-        # deviceRespJO = acuriteManager.getHubDevices()
-        #
-        # for device in deviceRespJO['devices']:
-        #     if device is not None:
-        #         deviceId = device['id']
-        #         deviceName = device['name']
-        #
-        #         LOGGER.debug('Device Id: {}'.format(deviceId))
-        #         LOGGER.debug('Device Name: {}'.format(deviceName))
-        #
-        #         if self.poly.getNode(deviceId) is None:
-        #             LOGGER.info('Node {} does not exists, skipping please run discover from controller'.format(deviceId))
-        #         else:
-        #             self.update(device)
+        LOGGER.info('AcuriteDeviceNode - query')
 
     def convert_timedelta_min(self, duration):
         days, seconds = duration.days, duration.seconds
@@ -103,24 +75,12 @@ class AcuriteDeviceNode(udi_interface.Node):
         except Exception as ex:
             LOGGER.error('AcuriteDeviceNode - Error in update', ex)
 
-
-    def poll(self, pollType):
-        if 'shortPoll' in pollType:
-            LOGGER.info('shortPoll (controller)')
-            self.query()
-        else:
-            LOGGER.info('longPoll (controller)')
-            pass
-
-
     id = 'acuritedevice'
-    
+
     drivers = [{'driver': 'CLITEMP', 'value': 0, 'uom': '17'},
-                {'driver': 'CLIHUM', 'value': 0, 'uom': '22'},
+               {'driver': 'CLIHUM', 'value': 0, 'uom': '22'},
                {'driver': 'BARPRES', 'value': 0, 'uom': '23'},
                {'driver': 'DEWPT', 'value': 0, 'uom': '17'},
                {'driver': 'GV1', 'value': 0, 'uom': '25'},
                {'driver': 'GV2', 'value': 0, 'uom': '25'},
                {'driver': 'GV3', 'value': 0, 'uom': '45'}]
-    
-    commands = {'QUERY': query}
