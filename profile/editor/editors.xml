@@ -1,6 +1,6 @@
 <editors>
     <!-- Boolean -->
-    <editor id="bool">
+    <editor id="I_CTLST">
         <range uom="2" subset="0,1" />
     </editor>
     <editor id="I_CLITEMP_F">

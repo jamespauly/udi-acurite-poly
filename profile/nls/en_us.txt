@@ -3,7 +3,7 @@ ND-acurite-NAME = Acurite NodeServer Controller
 ND-acurite-ICON = Weather
 CMD-ctl-DISCOVER-NAME = Discover
 CMD-ctl-REMOVE_NOTICES_ALL-NAME = Remove Notices
-ST-ctl-ST-NAME = NodeServer Online
+ST-ctl-ST-NAME = Acurite NodeServer Online
 
 # Device Node
 ND-acuritedevice-NAME = Acurite Device

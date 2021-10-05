@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# !/usr/bin/env python
 import requests
 import json
 
@@ -36,15 +36,16 @@ class AcuriteController(udi_interface.Node):
     def start(self):
         LOGGER.info('Started udi-acurite-poly NodeServer')
         self.query()
+
     #
     # def configHandler(self, config):
-        # at this time the interface should have all the nodes
-        # included from the database.  Here's where we could
-        # loop through those and create wrapped versions.
-        # LOGGER.info('handle config = {}'.format(config))
-        # nodes = self.poly.getNodes()
-        # for n in nodes:
-        #     LOGGER.info('Found node {} = {}'.format(n, nodes[n]))
+    # at this time the interface should have all the nodes
+    # included from the database.  Here's where we could
+    # loop through those and create wrapped versions.
+    # LOGGER.info('handle config = {}'.format(config))
+    # nodes = self.poly.getNodes()
+    # for n in nodes:
+    #     LOGGER.info('Found node {} = {}'.format(n, nodes[n]))
 
     # def nodeHandler(self, data):
     #     self.node_added_count += 1
@@ -73,9 +74,6 @@ class AcuriteController(udi_interface.Node):
         if userValid and passwordValid:
             self.configured = True
             self.discover();
-            for node in self.poly.nodes:
-                if self.poly.nodes[node] is not self:
-                    self.poly.nodes[node].query()
         else:
             if not userValid:
                 self.Notices['user'] = 'Acurite User must be configured.'
@@ -85,19 +83,42 @@ class AcuriteController(udi_interface.Node):
     def poll(self, pollType):
         if 'shortPoll' in pollType:
             LOGGER.info('shortPoll (controller)')
-            pass
+            self.query()
         else:
             LOGGER.info('longPoll (controller)')
-            self.query()
+            pass
 
     def query(self):
-        for node in self.poly.nodes:
-            self.poly.nodes[node].query()
+        self.discover()
+        LOGGER.info('Controller Query')
 
     def discover(self, *args, **kwargs):
+        acuriteUser = self.Parameters['acurite_user']
+        acuritePassword = self.Parameters['acurite_password']
         try:
-            acuriteManager = AcuriteManager(self.poly)
-            acuriteManager.getHubDevices()
+            LOGGER.info("Starting Acurite Device Discovery")
+            LOGGER.info('acurite_user: {}'.format(self.Parameters['acurite_user']))
+
+            acuriteManager = AcuriteManager(acuriteUser, acuritePassword)
+            deviceRespJO = acuriteManager.getHubDevices()
+
+            for device in deviceRespJO['devices']:
+                if device is not None:
+                    deviceId = device['id']
+                    deviceName = device['name']
+
+                    LOGGER.debug('Device Id: {}'.format(deviceId))
+                    LOGGER.debug('Device Name: {}'.format(deviceName))
+
+                    deviceNode = self.poly.getNode(deviceId)
+
+                    if deviceNode is None:
+                        self.poly.addNode(
+                            AcuriteDeviceNode(self.poly, self.address, deviceId, deviceName,
+                                              device))
+                    else:
+                        LOGGER.info('Node {} already exists, skipping'.format(deviceId))
+                        deviceNode.update(device)
 
         except Exception as ex:
             LOGGER.error("AcuriteController - Discovery failed with error", ex)
