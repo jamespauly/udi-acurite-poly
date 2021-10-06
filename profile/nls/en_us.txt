@@ -25,6 +25,10 @@ ST-device-RAINRT-NAME = Rainfall
 ST-device-LUMIN-NAME = Light Intensity
 ST-device-UV-NAME = UV Index
 
+# Device Node
+ND-acuriteatlas-NAME = Acurite Atlas Device
+ND-acuriteatlas-ICON = TempSensor
+
 IX_BATTERY_LEVEL-0 = Normal
 IX_BATTERY_LEVEL-1 = Low
 

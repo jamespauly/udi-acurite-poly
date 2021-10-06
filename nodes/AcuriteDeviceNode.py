@@ -74,7 +74,7 @@ class AcuriteDeviceNode(udi_interface.Node):
         except Exception as ex:
             LOGGER.error('AcuriteDeviceNode - Error in update', ex)
 
-    id = 'acuritedevice'
+    id = 'acuriteatlas'
 
     drivers = [{'driver': 'CLITEMP', 'value': 0, 'uom': '17'},
                {'driver': 'CLIHUM', 'value': 0, 'uom': '22'},
