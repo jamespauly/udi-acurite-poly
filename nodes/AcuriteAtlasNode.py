@@ -6,7 +6,6 @@ from enums import DeviceStatus, BatteryLevel
 LOGGER = udi_interface.LOGGER
 Custom = udi_interface.Custom
 
-
 class AcuriteAtlasNode(udi_interface.Node):
     def __init__(self, polyglot, primary, address, name, device):
         super(AcuriteAtlasNode, self).__init__(polyglot, primary, address, name)
@@ -17,8 +16,6 @@ class AcuriteAtlasNode(udi_interface.Node):
     def start(self):
         LOGGER.debug("AcuriteAtlasNode - start")
         self.update(self.initDevice)
-        for node in self.poly.nodes:
-            self.poly.nodes[node].reportDrivers()
 
     def query(self):
         LOGGER.info('AcuriteAtlasNode - query')
@@ -124,21 +121,21 @@ class AcuriteAtlasNode(udi_interface.Node):
             else:
                 self.setDriver('GV3', 0)
 
-            self.setDriver('CLITEMP', temp)
-            self.setDriver('GV4', feelsLike)
-            self.setDriver('CLIHUM', humidity)
-            self.setDriver('DEWPT', dewPoint)
-            self.setDriver('BARPRES', barometric)
-            self.setDriver('WINDDIR', windDirection)
-            self.setDriver('SPEED', windSpeed)
-            self.setDriver('GV7', windSpeedAvg)
-            self.setDriver('RAINRT', rainfall)
-            self.setDriver('LUMIN', lightIntensity)
-            self.setDriver('UV', uVIndex)
-            self.setDriver('GV5', lightningStrikeCnt)
-            self.setDriver('GV6', lightningLastStrikeDist)
-            self.setDriver('GV1', BatteryLevel[deviceBattery].value)
-            self.setDriver('GV2', DeviceStatus[deviceStatus].value)
+            self.setDriver('CLITEMP', temp, True)
+            self.setDriver('GV4', feelsLike, True)
+            self.setDriver('CLIHUM', humidity, True)
+            self.setDriver('DEWPT', dewPoint, True)
+            self.setDriver('BARPRES', barometric, True)
+            self.setDriver('WINDDIR', windDirection, True)
+            self.setDriver('SPEED', windSpeed, True)
+            self.setDriver('GV7', windSpeedAvg, True)
+            self.setDriver('RAINRT', rainfall, True)
+            self.setDriver('LUMIN', lightIntensity, True)
+            self.setDriver('UV', uVIndex, True)
+            self.setDriver('GV5', lightningStrikeCnt, True)
+            self.setDriver('GV6', lightningLastStrikeDist, True)
+            self.setDriver('GV1', BatteryLevel[deviceBattery].value, True)
+            self.setDriver('GV2', DeviceStatus[deviceStatus].value, True)
         except Exception as ex:
             LOGGER.error('AcuriteAtlasNode - Error in update', ex)
 

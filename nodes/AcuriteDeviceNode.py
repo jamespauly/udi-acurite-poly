@@ -6,17 +6,16 @@ from enums import DeviceStatus, BatteryLevel
 LOGGER = udi_interface.LOGGER
 Custom = udi_interface.Custom
 
-
 class AcuriteDeviceNode(udi_interface.Node):
     def __init__(self, polyglot, primary, address, name, device):
         super(AcuriteDeviceNode, self).__init__(polyglot, primary, address, name)
+        LOGGER.debug("Initialize AcuriteDeviceNode")
         self.poly.subscribe(self.poly.START, self.start, address)
         self.initDevice = device
 
     def start(self):
+        LOGGER.debug("AcuriteDeviceNode - start")
         self.update(self.initDevice)
-        for node in self.poly.nodes:
-            self.poly.nodes[node].reportDrivers()
 
     def query(self):
         LOGGER.debug('AcuriteDeviceNode - query')
@@ -62,12 +61,12 @@ class AcuriteDeviceNode(udi_interface.Node):
             else:
                 self.setDriver('GV3', 0)
 
-            self.setDriver('CLITEMP', temp)
-            self.setDriver('CLIHUM', humidity)
-            self.setDriver('BARPRES', barometric)
-            self.setDriver('DEWPT', dewPoint)
-            self.setDriver('GV1', BatteryLevel[deviceBattery].value)
-            self.setDriver('GV2', DeviceStatus[deviceStatus].value)
+            self.setDriver('CLITEMP', temp, True)
+            self.setDriver('CLIHUM', humidity, True)
+            self.setDriver('BARPRES', barometric, True)
+            self.setDriver('DEWPT', dewPoint, True)
+            self.setDriver('GV1', BatteryLevel[deviceBattery].value, True)
+            self.setDriver('GV2', DeviceStatus[deviceStatus].value, True)
         except Exception as ex:
             LOGGER.error('AcuriteDeviceNode - Error in update', ex)
 

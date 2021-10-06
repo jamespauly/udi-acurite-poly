@@ -11,8 +11,6 @@ LOG_HANDLER = udi_interface.LOG_HANDLER;
 
 from nodes import AcuriteController, AcuriteAtlasNode, AcuriteDeviceNode
 
-import logging
-
 if __name__ == "__main__":
     try:
         LOGGER.debug("Staring Poly Interface")
