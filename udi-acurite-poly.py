@@ -9,15 +9,14 @@ import sys
 LOGGER = udi_interface.LOGGER
 LOG_HANDLER = udi_interface.LOG_HANDLER;
 
-from nodes import AcuriteController
-from nodes import AcuriteDeviceNode
+from nodes import AcuriteController, AcuriteAtlasNode, AcuriteDeviceNode
 
 import logging
 
 if __name__ == "__main__":
     try:
         LOG_HANDLER.set_basic_config(True, logging.DEBUG)
-        polyglot = udi_interface.Interface([AcuriteController, AcuriteDeviceNode])
+        polyglot = udi_interface.Interface([AcuriteController, AcuriteDeviceNode, AcuriteAtlasNode])
         polyglot.start()
         control = AcuriteController(polyglot, 'controller', 'controller', 'Acurite Hub')
         polyglot.runForever()

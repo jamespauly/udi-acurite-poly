@@ -3,11 +3,12 @@ import requests
 import json
 
 import udi_interface
-from nodes import AcuriteDeviceNode
+from nodes import AcuriteDeviceNode, AcuriteAtlasNode
 from acurite import AcuriteManager
 
 LOGGER = udi_interface.LOGGER
 Custom = udi_interface.Custom
+
 
 class AcuriteController(udi_interface.Node):
     def __init__(self, polyglot, primary, address, name):
@@ -94,6 +95,7 @@ class AcuriteController(udi_interface.Node):
                 if device is not None:
                     deviceId = device['id']
                     deviceName = device['name']
+                    deviceModel = device['model_code']
 
                     LOGGER.debug('Device Id: {}'.format(deviceId))
                     LOGGER.debug('Device Name: {}'.format(deviceName))
@@ -101,13 +103,19 @@ class AcuriteController(udi_interface.Node):
                     deviceNode = self.poly.getNode(deviceId)
 
                     if deviceNode is None:
-                        self.poly.addNode(
-                            AcuriteDeviceNode(self.poly, self.address, deviceId, deviceName,
-                                              device))
+                        if deviceModel == 'Atlas':
+                            self.poly.addNode(
+                                AcuriteAtlasNode(self.poly, self.address, deviceId, deviceName,
+                                                 device))
+                        else:
+                            self.poly.addNode(
+                                AcuriteDeviceNode(self.poly, self.address, deviceId, deviceName,
+                                                  device))
                     else:
                         LOGGER.info('Node {} already exists, skipping'.format(deviceId))
                         deviceNode.update(device)
 
+            self.reportDrivers()
         except Exception as ex:
             LOGGER.error("AcuriteController - Discovery failed with error", ex)
 

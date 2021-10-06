@@ -1,7 +1,7 @@
 <editors>
     <!-- Boolean -->
     <editor id="I_CTLST">
-        <range uom="2" subset="0,1" />
+        <range uom="2" subset="0,1"/>
     </editor>
     <editor id="I_CLITEMP_F">
         <range uom="17" min="0" max="150" step="1" prec="0"/>
@@ -21,7 +21,34 @@
     <editor id="I_DEVICE_STATUS">
         <range subset="0-2" uom="25" nls="IX_DEVICE_STATUS"/>
     </editor>
-        <editor id="I_LAST_UPDATE">
+    <editor id="I_LAST_UPDATE">
         <range uom="45" min="0" max="100000"/>
+    </editor>
+    <editor id="I_FEELSLIKE_F">
+        <range uom="17" min="0" max="150"/>
+    </editor>
+    <editor id="I_WINDDIR">
+        <range uom="14" min="0" max="360"/>
+    </editor>
+    <editor id="I_WINDSPEED">
+        <range uom="48" min="0" max="150"/>
+    </editor>
+    <editor id="I_AVGWINDSPEED">
+        <range uom="48" min="0" max="150"/>
+    </editor>
+    <editor id="I_RAINRT">
+        <range uom="120" min="0" max="150"/>
+    </editor>
+    <editor id="I_LUMIN">
+        <range uom="36" min="0" max="150000"/>
+    </editor>
+    <editor id="I_UV">
+        <range uom="71" min="0" max="100"/>
+    </editor>
+    <editor id="I_LIGHTNINGSTRIKECNT">
+        <range uom="0" min="0" max="10000"/>
+    </editor>
+    <editor id="I_LIGHTNINGLASTSTRIKEDIST">
+        <range uom="116" min="0" max="10000"/>
     </editor>
 </editors>

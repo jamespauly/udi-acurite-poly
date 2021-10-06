@@ -15,6 +15,15 @@ ST-device-DEWPT-NAME = Dew Point
 ST-device-GV1-NAME = Battery Level
 ST-device-GV2-NAME = Device Status
 ST-device-GV3-NAME = Minutes Since Last Update
+ST-device-GV4-NAME = Feels Like
+ST-device-GV5-NAME = Lightning Strike Count (per day)
+ST-device-GV6-NAME = Lightning Last Strike Distance
+ST-device-GV7-NAME = Average Wind Speed
+ST-device-WINDDIR-NAME = Wind Direction
+ST-device-SPEED-NAME = Wind Speed
+ST-device-RAINRT-NAME = Rainfall
+ST-device-LUMIN-NAME = Light Intensity
+ST-device-UV-NAME = UV Index
 
 IX_BATTERY_LEVEL-0 = Normal
 IX_BATTERY_LEVEL-1 = Low

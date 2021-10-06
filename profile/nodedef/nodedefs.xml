@@ -19,9 +19,18 @@
         <editors/>
         <sts>
             <st id="CLITEMP" editor="I_CLITEMP_F"/>
+            <st id="GV4" editor="I_FEELSLIKE_F"/>
             <st id="CLIHUM" editor="I_CLIHUM"/>
             <st id="DEWPT" editor="I_DEWPT_F"/>
             <st id="BARPRES" editor="I_BARPRES"/>
+            <st id="WINDDIR" editor="I_WINDDIR"/>
+            <st id="SPEED" editor="I_WINDSPEED"/>
+            <st id="GV7" editor="I_AVGWINDSPEED"/>
+            <st id="RAINRT" editor="I_RAINRT"/>
+            <st id="LUMIN" editor="I_LUMIN"/>
+            <st id="UV" editor="I_UV"/>
+            <st id="GV5" editor="I_LIGHTNINGSTRIKECNT"/>
+            <st id="GV6" editor="I_LIGHTNINGLASTSTRIKEDIST"/>
             <st id="GV1" editor="I_BATLVL"/>
             <st id="GV2" editor="I_DEVICE_STATUS"/>
             <st id="GV3" editor="I_LAST_UPDATE"/>

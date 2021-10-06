@@ -15,6 +15,7 @@ class AcuriteDeviceNode(udi_interface.Node):
 
     def start(self):
         self.update(self.initDevice)
+        self.reportDrivers()
 
     def query(self):
         LOGGER.info('AcuriteDeviceNode - query')
@@ -70,8 +71,6 @@ class AcuriteDeviceNode(udi_interface.Node):
             self.setDriver('DEWPT', dewPoint)
             self.setDriver('GV1', BatteryLevel[deviceBattery].value)
             self.setDriver('GV2', DeviceStatus[deviceStatus].value)
-
-            self.reportDrivers()
         except Exception as ex:
             LOGGER.error('AcuriteDeviceNode - Error in update', ex)
 
