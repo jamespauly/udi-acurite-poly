@@ -12,15 +12,15 @@
   "profile_version": "3.0.0",
   "devMode": true,
   "customParams": {
-		"acurite_user": "jgpaul16@gmail.com",
-		"acurite_password": "my secret password"
-	},
+    "acurite_user": "<user>",
+    "acurite_password": "<password>"
+  },
   "credits": [
     {
-      "title": "Daikin: A Node Server for Controlling Diakin Mini-Splits",
+      "title": "Acurite: A Node Server for Controlling AcuRite Access",
       "author": "James Paul",
-      "version": "2.0.1",
-      "date": "July 16th, 2021",
+      "version": "1.4.0",
+      "date": "October 6th, 2021",
       "source": "https://github.com/jamespauly/udi-acurite-poly.git",
       "license": "https://github.com/jamespauly/udi-acurite-poly/blob/main/LICENSE"
     }
@@ -29,9 +29,8 @@
     "developer": "jgpaul16@gmail.com",
     "purchaseOptions": [
       {
-        "isTrial": true,
         "isPerpetual": true,
-        "price": 5.00
+        "price": 0.00
       }
     ]
   }

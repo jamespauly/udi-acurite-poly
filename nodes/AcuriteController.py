@@ -3,7 +3,8 @@ import requests
 import json
 
 import udi_interface
-from nodes import AcuriteDeviceNode, AcuriteAtlasNode
+
+import nodes
 from acurite import AcuriteManager
 
 LOGGER = udi_interface.LOGGER
@@ -111,7 +112,7 @@ class AcuriteController(udi_interface.Node):
                             if deviceModel == 'Atlas':
                                 LOGGER.debug("Creating AcuriteAtlasNode")
                                 try:
-                                    node = AcuriteAtlasNode(self.poly, self.address, deviceId, deviceName,
+                                    node = nodes.AcuriteAtlasNode(self.poly, self.address, deviceId, deviceName,
                                                         device)
                                 except Exception as ex:
                                     LOGGER.error("Error Loading AcuriteAtlasNode", ex)
@@ -119,7 +120,7 @@ class AcuriteController(udi_interface.Node):
                             else:
                                 LOGGER.debug("Creating AcuriteDeviceNode")
                                 try:
-                                    node = AcuriteDeviceNode(self.poly, self.address, deviceId, deviceName,
+                                    node = nodes.AcuriteDeviceNode(self.poly, self.address, deviceId, deviceName,
                                                              device)
                                 except Exception as ex:
                                     LOGGER.error("Error Loading AcuriteDeviceNode", ex)
