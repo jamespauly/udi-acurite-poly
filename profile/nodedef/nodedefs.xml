@@ -28,10 +28,12 @@
         </sts>
         <cmds>
             <sends/>
-            <accepts/>
+            <accepts>
+                <!--<cmd id="QUERY"/>-->
+            </accepts>
         </cmds>
     </nodeDef>
-        <nodeDef id="acuriteatlas" nls="device">
+        <nodeDef id="acuriteatlas" nls="atlas">
         <editors/>
         <sts>
             <st id="CLITEMP" editor="I_CLITEMP_F"/>
@@ -53,7 +55,9 @@
         </sts>
         <cmds>
             <sends/>
-            <accepts/>
+            <accepts>
+                <!--<cmd id="QUERY"/>-->
+            </accepts>
         </cmds>
     </nodeDef>
 </nodeDefs>

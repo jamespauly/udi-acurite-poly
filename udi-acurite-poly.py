@@ -15,7 +15,7 @@ import logging
 
 if __name__ == "__main__":
     try:
-        LOG_HANDLER.set_basic_config(True, logging.DEBUG)
+        LOGGER.debug("Staring Poly Interface")
         polyglot = udi_interface.Interface([AcuriteController, AcuriteDeviceNode, AcuriteAtlasNode])
         polyglot.start()
         control = AcuriteController(polyglot, 'controller', 'controller', 'Acurite Hub')

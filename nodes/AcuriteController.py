@@ -13,7 +13,6 @@ Custom = udi_interface.Custom
 class AcuriteController(udi_interface.Node):
     def __init__(self, polyglot, primary, address, name):
         super(AcuriteController, self).__init__(polyglot, primary, address, name)
-
         self.poly = polyglot
         self.name = name
         self.primary = primary
@@ -62,7 +61,7 @@ class AcuriteController(udi_interface.Node):
 
         if userValid and passwordValid:
             self.configured = True
-            self.discover();
+            self.query();
         else:
             if not userValid:
                 self.Notices['user'] = 'Acurite User must be configured.'
@@ -79,7 +78,9 @@ class AcuriteController(udi_interface.Node):
 
     def query(self):
         self.discover()
-        LOGGER.info('Controller Query')
+        for node in self.poly.nodes:
+            self.poly.nodes[node].reportDrivers()
+        LOGGER.info('AcuriteController - query')
 
     def discover(self, *args, **kwargs):
         acuriteUser = self.Parameters['acurite_user']
@@ -103,19 +104,20 @@ class AcuriteController(udi_interface.Node):
                     deviceNode = self.poly.getNode(deviceId)
 
                     if deviceNode is None:
-                        if deviceModel == 'Atlas':
-                            self.poly.addNode(
-                                AcuriteAtlasNode(self.poly, self.address, deviceId, deviceName,
-                                                 device))
-                        else:
-                            self.poly.addNode(
-                                AcuriteDeviceNode(self.poly, self.address, deviceId, deviceName,
-                                                  device))
+                        if deviceNode is None:
+                            if deviceModel == 'Atlas':
+                                LOGGER.debug("Creating AcuriteAtlasNode")
+                                node = AcuriteAtlasNode(self.poly, self.address, deviceId, deviceName,
+                                                        device)
+                            else:
+                                LOGGER.debug("Creating AcuriteDeviceNode")
+                                node = AcuriteDeviceNode(self.poly, self.address, deviceId, deviceName,
+                                                         device)
+
+                            self.poly.addNode(node)
                     else:
                         LOGGER.info('Node {} already exists, skipping'.format(deviceId))
                         deviceNode.update(device)
-
-            self.reportDrivers()
         except Exception as ex:
             LOGGER.error("AcuriteController - Discovery failed with error", ex)
 
@@ -129,5 +131,5 @@ class AcuriteController(udi_interface.Node):
         self.Notices.clear()
 
     id = 'acurite'
-    commands = {'REMOVE_NOTICES_ALL': remove_notices_all, 'DISCOVER': discover}
+    commands = {'REMOVE_NOTICES_ALL': remove_notices_all, 'DISCOVER': query}
     drivers = [{'driver': 'ST', 'value': 1, 'uom': 2}]

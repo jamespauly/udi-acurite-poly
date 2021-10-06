@@ -15,10 +15,11 @@ class AcuriteDeviceNode(udi_interface.Node):
 
     def start(self):
         self.update(self.initDevice)
-        self.reportDrivers()
+        for node in self.poly.nodes:
+            self.poly.nodes[node].reportDrivers()
 
     def query(self):
-        LOGGER.info('AcuriteDeviceNode - query')
+        LOGGER.debug('AcuriteDeviceNode - query')
 
     def convert_timedelta_min(self, duration):
         days, seconds = duration.days, duration.seconds
@@ -32,10 +33,6 @@ class AcuriteDeviceNode(udi_interface.Node):
         deviceBattery = device['battery_level']
         deviceStatus = device['status_code']
         deviceLastCheckIn = device['last_check_in_at']
-        temp = ''
-        humidity = ''
-        dewPoint = ''
-        barometric = ''
 
         for sensor in device['sensors']:
             if sensor['sensor_code'] == 'Temperature':
@@ -74,7 +71,7 @@ class AcuriteDeviceNode(udi_interface.Node):
         except Exception as ex:
             LOGGER.error('AcuriteDeviceNode - Error in update', ex)
 
-    id = 'acuriteatlas'
+    id = 'acuritedevice'
 
     drivers = [{'driver': 'CLITEMP', 'value': 0, 'uom': '17'},
                {'driver': 'CLIHUM', 'value': 0, 'uom': '22'},
