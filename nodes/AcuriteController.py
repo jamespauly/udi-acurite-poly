@@ -108,23 +108,22 @@ class AcuriteController(udi_interface.Node):
                     deviceNode = self.poly.getNode(deviceId)
 
                     if deviceNode is None:
-                        if deviceNode is None:
-                            if deviceModel == 'Atlas':
-                                LOGGER.debug("Creating AcuriteAtlasNode")
-                                try:
-                                    node = nodes.AcuriteAtlasNode(self.poly, self.address, deviceId, deviceName,
-                                                        device)
-                                except Exception as ex:
-                                    LOGGER.error("Error Loading AcuriteAtlasNode", ex)
-                                    continue
-                            else:
-                                LOGGER.debug("Creating AcuriteDeviceNode")
-                                try:
-                                    node = nodes.AcuriteDeviceNode(self.poly, self.address, deviceId, deviceName,
-                                                             device)
-                                except Exception as ex:
-                                    LOGGER.error("Error Loading AcuriteDeviceNode", ex)
-                                    continue
+                        if deviceModel == 'Atlas':
+                            LOGGER.debug("Creating AcuriteAtlasNode")
+                            try:
+                                node = nodes.AcuriteAtlasNode(self.poly, self.address, deviceId, deviceName,
+                                                    device)
+                            except Exception as ex:
+                                LOGGER.error("Error Loading AcuriteAtlasNode", ex)
+                                continue
+                        else:
+                            LOGGER.debug("Creating AcuriteDeviceNode")
+                            try:
+                                node = nodes.AcuriteDeviceNode(self.poly, self.address, deviceId, deviceName,
+                                                         device)
+                            except Exception as ex:
+                                LOGGER.error("Error Loading AcuriteDeviceNode", ex)
+                                continue
 
                             self.poly.addNode(node)
                     else:
