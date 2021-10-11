@@ -57,9 +57,9 @@ class AcuriteDeviceNode(udi_interface.Node):
                 currentDateTimeInUtc = datetime.now(timezone.utc)
                 deltaDateTime = currentDateTimeInUtc - lastCheckInDateTime
                 numOfMins = self.convert_timedelta_min(deltaDateTime)
-                self.setDriver('GV3', numOfMins)
+                self.setDriver('GV3', numOfMins, True)
             else:
-                self.setDriver('GV3', 0)
+                self.setDriver('GV3', 0, True)
 
             self.setDriver('CLITEMP', temp, True)
             self.setDriver('CLIHUM', humidity, True)
