@@ -36,6 +36,8 @@ class AcuriteAtlasNode(udi_interface.Node):
         self.setDriver('GV1', BatteryLevel[deviceBattery].value, True)
         self.setDriver('GV2', DeviceStatus[deviceStatus].value, True)
 
+        feelsLike = 0
+
         for sensor in device['sensors']:
             if sensor['sensor_code'] == 'Temperature':
                 temp = sensor['last_reading_value']
@@ -108,6 +110,8 @@ class AcuriteAtlasNode(udi_interface.Node):
                 LOGGER.debug(
                     'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], windSpeedAvg,
                                                                windSpeedAvgUOM))
+        if feelsLike == 0:
+            self.setDriver('GV4', temp, True)
 
         for sensor in device['wired_sensors']:
             if sensor['sensor_code'] == 'LightningStrikeCnt':
