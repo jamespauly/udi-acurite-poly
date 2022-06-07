@@ -82,6 +82,14 @@ class AcuriteAtlasNode(udi_interface.Node):
                 LOGGER.debug(
                     'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], feelsLike,
                                                                feelsLikeUOM))
+            elif sensor['sensor_code'] == 'Heat Index':
+                feelsLike = sensor['last_reading_value']
+                feelsLikeUOM = sensor['chart_unit']
+                self.setDriver('GV4', feelsLike, True)
+                LOGGER.debug(
+                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], feelsLike,
+                                                               feelsLikeUOM))
+
             elif sensor['sensor_code'] == 'Rainfall':
                 rainfall = sensor['last_reading_value']
                 rainfallUOM = sensor['chart_unit']
