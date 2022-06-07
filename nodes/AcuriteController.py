@@ -115,22 +115,23 @@ class AcuriteController(udi_interface.Node):
                         if deviceModel == 'Atlas':
                             LOGGER.debug("Creating AcuriteAtlasNode")
                             try:
-                                node = nodes.AcuriteAtlasNode(self.poly, self.address, deviceId, deviceName,
+                                atlas_node = nodes.AcuriteAtlasNode(self.poly, self.address, deviceId, deviceName,
                                                               device)
+                                self.poly.addNode(atlas_node)
                             except Exception as ex:
                                 LOGGER.error("Error Loading AcuriteAtlasNode", ex)
                                 continue
                         else:
                             LOGGER.debug("Creating AcuriteDeviceNode")
                             try:
-                                node = nodes.AcuriteDeviceNode(self.poly, self.address, deviceId, deviceName,
+                                device_node = nodes.AcuriteDeviceNode(self.poly, self.address, deviceId, deviceName,
                                                                device)
+                                self.poly.addNode(device_node)
                             except Exception as ex:
                                 LOGGER.error("Error Loading AcuriteDeviceNode", ex)
                                 continue
 
                             self.deviceCount += 1
-                            self.poly.addNode(node)
                     else:
                         LOGGER.info('Node {} already exists, skipping'.format(deviceId))
                         deviceNode.update(device)
