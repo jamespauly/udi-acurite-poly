@@ -32,25 +32,30 @@ class AcuriteDeviceNode(udi_interface.Node):
         deviceBattery = device['battery_level']
         deviceStatus = device['status_code']
         deviceLastCheckIn = device['last_check_in_at']
+        self.setDriver('GV1', BatteryLevel[deviceBattery].value, True)
+        self.setDriver('GV2', DeviceStatus[deviceStatus].value, True)
 
         for sensor in device['sensors']:
             if sensor['sensor_code'] == 'Temperature':
                 temp = sensor['last_reading_value']
                 temp_uom = sensor['chart_unit']
+                self.setDriver('CLITEMP', temp, True)
                 LOGGER.debug('Device Name: {}, Sensor Temp: {}{}'.format(deviceName, temp, temp_uom))
             if sensor['sensor_code'] == 'Humidity':
                 humidity = sensor['last_reading_value']
                 humidityUOM = sensor['chart_unit']
+                self.setDriver('CLIHUM', humidity, True)
                 LOGGER.debug('Device Name: {}, Sensor Humidity: {}{}'.format(deviceName, humidity, humidityUOM))
             if sensor['sensor_code'] == 'Dew Point':
                 dewPoint = sensor['last_reading_value']
                 dewPointUOM = sensor['chart_unit']
+                self.setDriver('DEWPT', dewPoint, True)
                 LOGGER.debug('Device Name: {}, Sensor Dew Point: {}{}'.format(deviceName, dewPoint, dewPointUOM))
             if sensor['sensor_code'] == 'Barometric Pressure':
                 barometric = sensor['last_reading_value']
                 barometricUOM = sensor['chart_unit']
+                self.setDriver('BARPRES', barometric, True)
                 LOGGER.debug('Device Name: {}, Sensor Dew Point: {}{}'.format(deviceName, barometric, barometricUOM))
-
         try:
             if deviceLastCheckIn is not None and deviceLastCheckIn != '':
                 lastCheckInDateTime = datetime.fromisoformat(deviceLastCheckIn)
@@ -60,13 +65,6 @@ class AcuriteDeviceNode(udi_interface.Node):
                 self.setDriver('GV3', numOfMins, True)
             else:
                 self.setDriver('GV3', 0, True)
-
-            self.setDriver('CLITEMP', temp, True)
-            self.setDriver('CLIHUM', humidity, True)
-            self.setDriver('BARPRES', barometric, True)
-            self.setDriver('DEWPT', dewPoint, True)
-            self.setDriver('GV1', BatteryLevel[deviceBattery].value, True)
-            self.setDriver('GV2', DeviceStatus[deviceStatus].value, True)
         except Exception as ex:
             LOGGER.error('AcuriteDeviceNode - Error in update', ex)
 

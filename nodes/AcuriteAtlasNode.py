@@ -33,65 +33,78 @@ class AcuriteAtlasNode(udi_interface.Node):
         deviceBattery = device['battery_level']
         deviceStatus = device['status_code']
         deviceLastCheckIn = device['last_check_in_at']
+        self.setDriver('GV1', BatteryLevel[deviceBattery].value, True)
+        self.setDriver('GV2', DeviceStatus[deviceStatus].value, True)
 
         for sensor in device['sensors']:
             if sensor['sensor_code'] == 'Temperature':
                 temp = sensor['last_reading_value']
                 temp_uom = sensor['chart_unit']
+                self.setDriver('CLITEMP', temp, True)
                 LOGGER.debug('Device Name: {}, Sensor Temp: {} {}'.format(deviceName, temp, temp_uom))
             elif sensor['sensor_code'] == 'Humidity':
                 humidity = sensor['last_reading_value']
                 humidityUOM = sensor['chart_unit']
+                self.setDriver('CLIHUM', humidity, True)
                 LOGGER.debug('Device Name: {}, Sensor Humidity: {} {}'.format(deviceName, humidity, humidityUOM))
             elif sensor['sensor_code'] == 'Dew Point':
                 dewPoint = sensor['last_reading_value']
                 dewPointUOM = sensor['chart_unit']
+                self.setDriver('DEWPT', dewPoint, True)
                 LOGGER.debug('Device Name: {}, Sensor Dew Point: {} {}'.format(deviceName, dewPoint, dewPointUOM))
             elif sensor['sensor_code'] == 'Barometric Pressure':
                 barometric = sensor['last_reading_value']
                 barometricUOM = sensor['chart_unit']
+                self.setDriver('BARPRES', barometric, True)
                 LOGGER.debug(
                     'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], barometric,
                                                                barometricUOM))
             elif sensor['sensor_code'] == 'Wind Direction':
                 windDirection = sensor['last_reading_value']
                 windDirectionUOM = 'degrees'
+                self.setDriver('WINDDIR', windDirection, True)
                 LOGGER.debug(
                     'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], windDirection,
                                                                windDirectionUOM))
             elif sensor['sensor_code'] == 'Wind Speed':
                 windSpeed = sensor['last_reading_value']
                 windSpeedUOM = sensor['chart_unit']
+                self.setDriver('SPEED', windSpeed, True)
                 LOGGER.debug(
                     'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], windSpeed,
                                                                windSpeedUOM))
             elif sensor['sensor_code'] == 'Feels Like':
                 feelsLike = sensor['last_reading_value']
                 feelsLikeUOM = sensor['chart_unit']
+                self.setDriver('GV4', feelsLike, True)
                 LOGGER.debug(
                     'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], feelsLike,
                                                                feelsLikeUOM))
             elif sensor['sensor_code'] == 'Rainfall':
                 rainfall = sensor['last_reading_value']
                 rainfallUOM = sensor['chart_unit']
+                self.setDriver('RAINRT', rainfall, True)
                 LOGGER.debug(
                     'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], rainfall,
                                                                rainfallUOM))
             elif sensor['sensor_code'] == 'LightIntensity':
                 lightIntensity = sensor['last_reading_value']
                 lightIntensityUOM = sensor['chart_unit']
+                self.setDriver('LUMIN', lightIntensity, True)
                 LOGGER.debug(
                     'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], lightIntensity,
                                                                lightIntensityUOM))
             elif sensor['sensor_code'] == 'UVIndex':
                 uVIndex = sensor['last_reading_value']
                 uVIndexUOM = sensor['chart_unit']
+                self.setDriver('UV', uVIndex, True)
                 LOGGER.debug(
                     'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], uVIndex, uVIndexUOM))
 
             elif sensor['sensor_code'] == 'WindSpeedAvg':
                 windSpeedAvg = sensor['last_reading_value']
                 windSpeedAvgUOM = sensor['chart_unit']
+                self.setDriver('GV7', windSpeedAvg, True)
                 LOGGER.debug(
                     'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], windSpeedAvg,
                                                                windSpeedAvgUOM))
@@ -100,12 +113,14 @@ class AcuriteAtlasNode(udi_interface.Node):
             if sensor['sensor_code'] == 'LightningStrikeCnt':
                 lightningStrikeCnt = sensor['last_reading_value']
                 lightningStrikeCntUOM = sensor['chart_unit']
+                self.setDriver('GV5', lightningStrikeCnt, True)
                 LOGGER.debug(
                     'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], lightningStrikeCnt,
                                                                lightningStrikeCntUOM))
             elif sensor['sensor_code'] == 'LightningLastStrikeDist':
                 lightningLastStrikeDist = sensor['last_reading_value']
                 lightningLastStrikeDistUOM = sensor['chart_unit']
+                self.setDriver('GV6', lightningLastStrikeDist, True)
                 LOGGER.debug(
                     'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'],
                                                                lightningLastStrikeDist,
@@ -120,22 +135,6 @@ class AcuriteAtlasNode(udi_interface.Node):
                 self.setDriver('GV3', numOfMins, True)
             else:
                 self.setDriver('GV3', 0, True)
-
-            self.setDriver('CLITEMP', temp, True)
-            self.setDriver('GV4', feelsLike, True)
-            self.setDriver('CLIHUM', humidity, True)
-            self.setDriver('DEWPT', dewPoint, True)
-            self.setDriver('BARPRES', barometric, True)
-            self.setDriver('WINDDIR', windDirection, True)
-            self.setDriver('SPEED', windSpeed, True)
-            self.setDriver('GV7', windSpeedAvg, True)
-            self.setDriver('RAINRT', rainfall, True)
-            self.setDriver('LUMIN', lightIntensity, True)
-            self.setDriver('UV', uVIndex, True)
-            self.setDriver('GV5', lightningStrikeCnt, True)
-            self.setDriver('GV6', lightningLastStrikeDist, True)
-            self.setDriver('GV1', BatteryLevel[deviceBattery].value, True)
-            self.setDriver('GV2', DeviceStatus[deviceStatus].value, True)
         except Exception as ex:
             LOGGER.error('AcuriteAtlasNode - Error in update', ex)
 
