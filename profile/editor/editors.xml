@@ -48,7 +48,7 @@
     <editor id="I_LIGHTNINGSTRIKECNT">
         <range uom="0" min="0" max="10000"/>
     </editor>
-    <editor id="I_LIGHTNINGLASTSTRIKEDIST">
+    <editor id="I_LIGHTNINGSTRIKEDIST">
         <range uom="116" min="0" max="10000"/>
     </editor>
 </editors>

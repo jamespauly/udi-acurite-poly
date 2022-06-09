@@ -6,19 +6,19 @@ from enums import DeviceStatus, BatteryLevel
 LOGGER = udi_interface.LOGGER
 Custom = udi_interface.Custom
 
-class AcuriteAtlasNode(udi_interface.Node):
+class AcuriteLightningTNode(udi_interface.Node):
     def __init__(self, polyglot, primary, address, name, device):
-        super(AcuriteAtlasNode, self).__init__(polyglot, primary, address, name)
-        LOGGER.debug("Initialize AcuriteAtlasNode")
+        super(AcuriteLightningTNode, self).__init__(polyglot, primary, address, name)
+        LOGGER.debug("Initialize AcuriteLightningTNode")
         self.poly.subscribe(self.poly.START, self.start, address)
         self.initDevice = device
 
     def start(self):
-        LOGGER.debug("AcuriteAtlasNode - start")
+        LOGGER.debug("AcuriteLightningTNode - start")
         self.update(self.initDevice)
 
     def query(self):
-        LOGGER.info('AcuriteAtlasNode - query')
+        LOGGER.info('AcuriteLightningTNode - query')
 
     def convert_timedelta_min(self, duration):
         days, seconds = duration.days, duration.seconds
@@ -28,7 +28,7 @@ class AcuriteAtlasNode(udi_interface.Node):
         return (days * 24 * 60) + (hours * 60) + minutes
 
     def update(self, device):
-        LOGGER.debug("AcuriteAtlasNode - update")
+        LOGGER.debug("AcuriteLightningTNode - update")
         deviceName = device['name']
         deviceBattery = device['battery_level']
         deviceStatus = device['status_code']
@@ -62,20 +62,6 @@ class AcuriteAtlasNode(udi_interface.Node):
                 LOGGER.debug(
                     'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], barometric,
                                                                barometricUOM))
-            elif sensor['sensor_code'] == 'Wind Direction':
-                windDirection = sensor['last_reading_value']
-                windDirectionUOM = 'degrees'
-                self.setDriver('WINDDIR', windDirection, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], windDirection,
-                                                               windDirectionUOM))
-            elif sensor['sensor_code'] == 'Wind Speed':
-                windSpeed = sensor['last_reading_value']
-                windSpeedUOM = sensor['chart_unit']
-                self.setDriver('SPEED', windSpeed, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], windSpeed,
-                                                               windSpeedUOM))
             elif sensor['sensor_code'] == 'Feels Like':
                 feelsLike = sensor['last_reading_value']
                 feelsLikeUOM = sensor['chart_unit']
@@ -86,39 +72,10 @@ class AcuriteAtlasNode(udi_interface.Node):
             elif sensor['sensor_code'] == 'Heat Index':
                 heatIndex = sensor['last_reading_value']
                 heatIndexUOM = sensor['chart_unit']
-                #self.setDriver('GV4', feelsLike, True)
+                #self.setDriver('GV4', heatIndex, True)
                 LOGGER.debug(
                     'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], heatIndex,
                                                                heatIndexUOM))
-
-            elif sensor['sensor_code'] == 'Rainfall':
-                rainfall = sensor['last_reading_value']
-                rainfallUOM = sensor['chart_unit']
-                self.setDriver('RAINRT', rainfall, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], rainfall,
-                                                               rainfallUOM))
-            elif sensor['sensor_code'] == 'LightIntensity':
-                lightIntensity = sensor['last_reading_value']
-                lightIntensityUOM = sensor['chart_unit']
-                self.setDriver('LUMIN', lightIntensity, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], lightIntensity,
-                                                               lightIntensityUOM))
-            elif sensor['sensor_code'] == 'UVIndex':
-                uVIndex = sensor['last_reading_value']
-                uVIndexUOM = sensor['chart_unit']
-                self.setDriver('UV', uVIndex, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], uVIndex, uVIndexUOM))
-
-            elif sensor['sensor_code'] == 'WindSpeedAvg':
-                windSpeedAvg = sensor['last_reading_value']
-                windSpeedAvgUOM = sensor['chart_unit']
-                self.setDriver('GV7', windSpeedAvg, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], windSpeedAvg,
-                                                               windSpeedAvgUOM))
         if int(feelsLike) > 0:
             self.setDriver('GV4', feelsLike, True)
         elif int(feelsLike) == 0 and int(heatIndex) > 0:
@@ -161,24 +118,18 @@ class AcuriteAtlasNode(udi_interface.Node):
             else:
                 self.setDriver('GV3', 0, True)
         except Exception as ex:
-            LOGGER.error('AcuriteAtlasNode - Error in update', ex)
+            LOGGER.error('AcuriteLightningTNode - Error in update', ex)
 
-    id = 'acuriteatlas'
+    id = 'acuritelightningt'
 
     drivers = [{'driver': 'CLITEMP', 'value': 0, 'uom': '17'},
-               {'driver': 'GV4', 'value': 0, 'uom': '17'},
+               {'driver': 'GV4', 'value': 0, 'uom': '17'}, # Heat Index / Feels Like
                {'driver': 'CLIHUM', 'value': 0, 'uom': '22'},
                {'driver': 'BARPRES', 'value': 0, 'uom': '23'},
                {'driver': 'DEWPT', 'value': 0, 'uom': '17'},
-               {'driver': 'GV1', 'value': 0, 'uom': '25'},
-               {'driver': 'GV2', 'value': 0, 'uom': '25'},
-               {'driver': 'GV3', 'value': 0, 'uom': '45'},
-               {'driver': 'WINDDIR', 'value': 0, 'uom': '14'},
-               {'driver': 'SPEED', 'value': 0, 'uom': '48'},
-               {'driver': 'RAINRT', 'value': 0, 'uom': '120'},
-               {'driver': 'LUMIN', 'value': 0, 'uom': '36'},
-               {'driver': 'UV', 'value': 0, 'uom': '71'},
-               {'driver': 'GV5', 'value': 0, 'uom': '0'},
-               {'driver': 'GV6', 'value': 0, 'uom': '116'},
-               {'driver': 'GV8', 'value': 0, 'uom': '116'},
-               {'driver': 'GV7', 'value': 0, 'uom': '48'}]
+               {'driver': 'GV1', 'value': 0, 'uom': '25'}, # device battery
+               {'driver': 'GV2', 'value': 0, 'uom': '25'}, # device status
+               {'driver': 'GV3', 'value': 0, 'uom': '45'}, # last checkin time
+               {'driver': 'GV5', 'value': 0, 'uom': '0'}, # lightning Strike Cnt
+               {'driver': 'GV6', 'value': 0, 'uom': '116'}, # lightning Last Strike Dist
+               {'driver': 'GV8', 'value': 0, 'uom': '116'}] # lightning Closest Strike Dist
