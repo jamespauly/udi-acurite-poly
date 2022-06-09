@@ -9,6 +9,8 @@ ST-ctl-ST-NAME = Acurite NodeServer Online
 # Device Node
 ND-acuritedevice-NAME = Acurite Device
 ND-acuritedevice-ICON = TempSensor
+
+# Common Device NLS
 CMD-device-QUERY-NAME = Refresh
 ST-device-CLITEMP-NAME = Temperature
 ST-device-CLIHUM-NAME = Relative Humidity
@@ -20,6 +22,7 @@ ST-device-GV3-NAME = Minutes Since Last Update
 ST-device-GV4-NAME = Feels Like
 ST-device-GV5-NAME = Lightning Strike Count (per day)
 ST-device-GV6-NAME = Lightning Last Strike Distance
+ST-device-GV8-NAME = Lightning Closest Strike Distance
 ST-device-GV7-NAME = Average Wind Speed
 ST-device-WINDDIR-NAME = Wind Direction
 ST-device-SPEED-NAME = Wind Speed
@@ -30,23 +33,10 @@ ST-device-UV-NAME = UV Index
 # Device Node
 ND-acuriteatlas-NAME = Acurite Atlas Device
 ND-acuriteatlas-ICON = TempSensor
-CMD-atlas-QUERY-NAME = Refresh
-ST-atlas-CLITEMP-NAME = Temperature
-ST-atlas-CLIHUM-NAME = Relative Humidity
-ST-atlas-BARPRES-NAME = Barametric Pressure
-ST-atlas-DEWPT-NAME = Dew Point
-ST-atlas-GV1-NAME = Battery Level
-ST-atlas-GV2-NAME = Device Status
-ST-atlas-GV3-NAME = Minutes Since Last Update
-ST-atlas-GV4-NAME = Feels Like
-ST-atlas-GV5-NAME = Lightning Strike Count (per day)
-ST-atlas-GV6-NAME = Lightning Last Strike Distance
-ST-atlas-GV7-NAME = Average Wind Speed
-ST-atlas-WINDDIR-NAME = Wind Direction
-ST-atlas-SPEED-NAME = Wind Speed
-ST-atlas-RAINRT-NAME = Rainfall
-ST-atlas-LUMIN-NAME = Light Intensity
-ST-atlas-UV-NAME = UV Index
+
+# Device Node
+ND-acuritelightningt-NAME = Acurite Lightning Tower
+ND-acuritelightningt-ICON = TempSensor
 
 IX_BATTERY_LEVEL-0 = Normal
 IX_BATTERY_LEVEL-1 = Low

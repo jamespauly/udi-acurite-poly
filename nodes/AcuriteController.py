@@ -121,6 +121,15 @@ class AcuriteController(udi_interface.Node):
                             except Exception as ex:
                                 LOGGER.error("Error Loading AcuriteAtlasNode", ex)
                                 continue
+                        elif deviceModel == 'LightningT':
+                            LOGGER.debug("Creating AcuriteLightningTNode")
+                            try:
+                                lightningt_node = nodes.AcuriteLightningTNode(self.poly, self.address, deviceId, deviceName,
+                                                                    device)
+                                self.poly.addNode(lightningt_node)
+                            except Exception as ex:
+                                LOGGER.error("Error Loading AcuriteLightningTNode", ex)
+                                continue
                         else:
                             LOGGER.debug("Creating AcuriteDeviceNode")
                             try:
