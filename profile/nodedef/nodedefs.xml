@@ -48,7 +48,7 @@
             <st id="LUMIN" editor="I_LUMIN"/>
             <st id="UV" editor="I_UV"/>
             <st id="GV5" editor="I_LIGHTNINGSTRIKECNT"/>
-            <st id="GV6" editor="I_LIGHTNINGLASTSTRIKEDIST"/>
+            <st id="GV6" editor="I_LIGHTNINGSTRIKEDIST"/>
             <st id="GV8" editor="I_LIGHTNINGSTRIKEDIST"/>
             <st id="GV1" editor="I_BATLVL"/>
             <st id="GV2" editor="I_DEVICE_STATUS"/>

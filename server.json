@@ -19,7 +19,7 @@
     {
       "title": "Acurite: A Node Server for retrieving AcuRite Access data",
       "author": "James Paul",
-      "version": "1.4.0",
+      "version": "2.2.0",
       "date": "October 6th, 2021",
       "source": "https://github.com/jamespauly/udi-acurite-poly.git",
       "license": "https://github.com/jamespauly/udi-acurite-poly/blob/main/LICENSE"

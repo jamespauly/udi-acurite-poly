@@ -1,4 +1,6 @@
 from datetime import datetime, timezone
+from jsonpath_ng import jsonpath
+from jsonpath_ng.ext import parse
 
 import udi_interface
 from enums import DeviceStatus, BatteryLevel
@@ -35,27 +37,38 @@ class AcuriteDeviceNode(udi_interface.Node):
         self.setDriver('GV1', BatteryLevel[deviceBattery].value, True)
         self.setDriver('GV2', DeviceStatus[deviceStatus].value, True)
 
-        for sensor in device['sensors']:
-            if sensor['sensor_code'] == 'Temperature':
-                temp = sensor['last_reading_value']
-                temp_uom = sensor['chart_unit']
-                self.setDriver('CLITEMP', temp, True)
-                LOGGER.debug('Device Name: {}, Sensor Temp: {}{}'.format(deviceName, temp, temp_uom))
-            if sensor['sensor_code'] == 'Humidity':
-                humidity = sensor['last_reading_value']
-                humidityUOM = sensor['chart_unit']
-                self.setDriver('CLIHUM', humidity, True)
-                LOGGER.debug('Device Name: {}, Sensor Humidity: {}{}'.format(deviceName, humidity, humidityUOM))
-            if sensor['sensor_code'] == 'Dew Point':
-                dewPoint = sensor['last_reading_value']
-                dewPointUOM = sensor['chart_unit']
-                self.setDriver('DEWPT', dewPoint, True)
-                LOGGER.debug('Device Name: {}, Sensor Dew Point: {}{}'.format(deviceName, dewPoint, dewPointUOM))
-            if sensor['sensor_code'] == 'Barometric Pressure':
-                barometric = sensor['last_reading_value']
-                barometricUOM = sensor['chart_unit']
-                self.setDriver('BARPRES', barometric, True)
-                LOGGER.debug('Device Name: {}, Sensor Dew Point: {}{}'.format(deviceName, barometric, barometricUOM))
+        jsonpath_temperature = parse("$.sensors[?sensor_code='Temperature'].last_reading_value")
+        temperature_list = jsonpath_temperature.find(device)
+        jsonpath_temperature_uom = parse("$.sensors[?sensor_code='Temperature'].chart_unit")
+        temperature_list_uom = jsonpath_temperature_uom.find(device)
+        self.setDriver('CLITEMP', temperature_list[0].value, True)
+        LOGGER.debug('Device Name: {}, Sensor Temp: {} {}'.format(deviceName, temperature_list[0].value, temperature_list_uom[0].value))
+
+        jsonpath_humidity = parse("$.sensors[?sensor_code='Humidity'].last_reading_value")
+        humidity_list = jsonpath_humidity.find(device)
+        jsonpath_humidity_uom = parse("$.sensors[?sensor_code='Humidity'].chart_unit")
+        humidity_list_uom = jsonpath_humidity_uom.find(device)
+        self.setDriver('CLIHUM', humidity_list[0].value, True)
+        LOGGER.debug('Device Name: {}, Sensor Humidity: {} {}'.format(deviceName, humidity_list[0].value,
+                                                                  humidity_list_uom[0].value))
+
+        jsonpath_dew_point = parse("$.sensors[?sensor_code='Dew Point'].last_reading_value")
+        dew_point_list = jsonpath_dew_point.find(device)
+        jsonpath_dew_point_uom = parse("$.sensors[?sensor_code='Dew Point'].chart_unit")
+        dew_point_list_uom = jsonpath_dew_point_uom.find(device)
+        self.setDriver('DEWPT', dew_point_list[0].value, True)
+        LOGGER.debug('Device Name: {}, Sensor Dew Point: {} {}'.format(deviceName, dew_point_list[0].value,
+                                                                   dew_point_list_uom[0].value))
+
+        jsonpath_barometric_pressure = parse("$.sensors[?sensor_code='Barometric Pressure'].last_reading_value")
+        barometric_pressure_list = jsonpath_barometric_pressure.find(device)
+        jsonpath_barometric_pressure_uom = parse("$.sensors[?sensor_code='Barometric Pressure'].chart_unit")
+        barometric_pressure_list_uom = jsonpath_barometric_pressure_uom.find(device)
+        self.setDriver('BARPRES', barometric_pressure_list[0].value, True)
+        LOGGER.debug(
+        'Device Name: {}, Sensor Barometric Pressure: {} {}'.format(deviceName, barometric_pressure_list[0].value,
+                                                                    barometric_pressure_list_uom[0].value))
+
         try:
             if deviceLastCheckIn is not None and deviceLastCheckIn != '':
                 lastCheckInDateTime = datetime.fromisoformat(deviceLastCheckIn)

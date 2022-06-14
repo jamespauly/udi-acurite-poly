@@ -1,10 +1,13 @@
 from datetime import datetime, timezone
+from jsonpath_ng import jsonpath
+from jsonpath_ng.ext import parse
 
 import udi_interface
 from enums import DeviceStatus, BatteryLevel
 
 LOGGER = udi_interface.LOGGER
 Custom = udi_interface.Custom
+
 
 class AcuriteAtlasNode(udi_interface.Node):
     def __init__(self, polyglot, primary, address, name, device):
@@ -36,120 +39,149 @@ class AcuriteAtlasNode(udi_interface.Node):
         self.setDriver('GV1', BatteryLevel[deviceBattery].value, True)
         self.setDriver('GV2', DeviceStatus[deviceStatus].value, True)
 
-        feelsLike = 0
-        heatIndex = 0
+        jsonpath_temperature = parse("$.sensors[?sensor_code='Temperature'].last_reading_value")
+        temperature_list = jsonpath_temperature.find(device)
+        jsonpath_temperature_uom = parse("$.sensors[?sensor_code='Temperature'].chart_unit")
+        temperature_list_uom = jsonpath_temperature_uom.find(device)
+        self.setDriver('CLITEMP', temperature_list[0].value, True)
+        LOGGER.debug('Device Name: {}, Sensor Temp: {} {}'.format(deviceName, temperature_list[0].value,
+                                                                  temperature_list_uom[0].value))
 
-        for sensor in device['sensors']:
-            if sensor['sensor_code'] == 'Temperature':
-                temp = sensor['last_reading_value']
-                temp_uom = sensor['chart_unit']
-                self.setDriver('CLITEMP', temp, True)
-                LOGGER.debug('Device Name: {}, Sensor Temp: {} {}'.format(deviceName, temp, temp_uom))
-            elif sensor['sensor_code'] == 'Humidity':
-                humidity = sensor['last_reading_value']
-                humidityUOM = sensor['chart_unit']
-                self.setDriver('CLIHUM', humidity, True)
-                LOGGER.debug('Device Name: {}, Sensor Humidity: {} {}'.format(deviceName, humidity, humidityUOM))
-            elif sensor['sensor_code'] == 'Dew Point':
-                dewPoint = sensor['last_reading_value']
-                dewPointUOM = sensor['chart_unit']
-                self.setDriver('DEWPT', dewPoint, True)
-                LOGGER.debug('Device Name: {}, Sensor Dew Point: {} {}'.format(deviceName, dewPoint, dewPointUOM))
-            elif sensor['sensor_code'] == 'Barometric Pressure':
-                barometric = sensor['last_reading_value']
-                barometricUOM = sensor['chart_unit']
-                self.setDriver('BARPRES', barometric, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], barometric,
-                                                               barometricUOM))
-            elif sensor['sensor_code'] == 'Wind Direction':
-                windDirection = sensor['last_reading_value']
-                windDirectionUOM = 'degrees'
-                self.setDriver('WINDDIR', windDirection, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], windDirection,
-                                                               windDirectionUOM))
-            elif sensor['sensor_code'] == 'Wind Speed':
-                windSpeed = sensor['last_reading_value']
-                windSpeedUOM = sensor['chart_unit']
-                self.setDriver('SPEED', windSpeed, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], windSpeed,
-                                                               windSpeedUOM))
-            elif sensor['sensor_code'] == 'Feels Like':
-                feelsLike = sensor['last_reading_value']
-                feelsLikeUOM = sensor['chart_unit']
-                #self.setDriver('GV4', feelsLike, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], feelsLike,
-                                                               feelsLikeUOM))
-            elif sensor['sensor_code'] == 'Heat Index':
-                heatIndex = sensor['last_reading_value']
-                heatIndexUOM = sensor['chart_unit']
-                #self.setDriver('GV4', feelsLike, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], heatIndex,
-                                                               heatIndexUOM))
+        jsonpath_humidity = parse("$.sensors[?sensor_code='Humidity'].last_reading_value")
+        humidity_list = jsonpath_humidity.find(device)
+        jsonpath_humidity_uom = parse("$.sensors[?sensor_code='Humidity'].chart_unit")
+        humidity_list_uom = jsonpath_humidity_uom.find(device)
+        self.setDriver('CLIHUM', humidity_list[0].value, True)
+        LOGGER.debug('Device Name: {}, Sensor Humidity: {} {}'.format(deviceName, humidity_list[0].value,
+                                                                      humidity_list_uom[0].value))
 
-            elif sensor['sensor_code'] == 'Rainfall':
-                rainfall = sensor['last_reading_value']
-                rainfallUOM = sensor['chart_unit']
-                self.setDriver('RAINRT', rainfall, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], rainfall,
-                                                               rainfallUOM))
-            elif sensor['sensor_code'] == 'LightIntensity':
-                lightIntensity = sensor['last_reading_value']
-                lightIntensityUOM = sensor['chart_unit']
-                self.setDriver('LUMIN', lightIntensity, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], lightIntensity,
-                                                               lightIntensityUOM))
-            elif sensor['sensor_code'] == 'UVIndex':
-                uVIndex = sensor['last_reading_value']
-                uVIndexUOM = sensor['chart_unit']
-                self.setDriver('UV', uVIndex, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], uVIndex, uVIndexUOM))
+        jsonpath_dew_point = parse("$.sensors[?sensor_code='Dew Point'].last_reading_value")
+        dew_point_list = jsonpath_dew_point.find(device)
+        jsonpath_dew_point_uom = parse("$.sensors[?sensor_code='Dew Point'].chart_unit")
+        dew_point_list_uom = jsonpath_dew_point_uom.find(device)
+        self.setDriver('DEWPT', dew_point_list[0].value, True)
+        LOGGER.debug('Device Name: {}, Sensor Dew Point: {} {}'.format(deviceName, dew_point_list[0].value,
+                                                                       dew_point_list_uom[0].value))
 
-            elif sensor['sensor_code'] == 'WindSpeedAvg':
-                windSpeedAvg = sensor['last_reading_value']
-                windSpeedAvgUOM = sensor['chart_unit']
-                self.setDriver('GV7', windSpeedAvg, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], windSpeedAvg,
-                                                               windSpeedAvgUOM))
-        if int(feelsLike) > 0:
-            self.setDriver('GV4', feelsLike, True)
-        elif int(feelsLike) == 0 and int(heatIndex) > 0:
-            self.setDriver('GV4', heatIndex, True)
+        jsonpath_barometric_pressure = parse("$.sensors[?sensor_code='Barometric Pressure'].last_reading_value")
+        barometric_pressure_list = jsonpath_barometric_pressure.find(device)
+        jsonpath_barometric_pressure_uom = parse("$.sensors[?sensor_code='Barometric Pressure'].chart_unit")
+        barometric_pressure_list_uom = jsonpath_barometric_pressure_uom.find(device)
+        self.setDriver('BARPRES', barometric_pressure_list[0].value, True)
+        LOGGER.debug(
+            'Device Name: {}, Sensor Barometric Pressure: {} {}'.format(deviceName, barometric_pressure_list[0].value,
+                                                                        barometric_pressure_list_uom[0].value))
+
+        jsonpath_wind_direction = parse("$.sensors[?sensor_code='Wind Direction'].last_reading_value")
+        wind_direction_list = jsonpath_wind_direction.find(device)
+        jsonpath_wind_direction_uom = parse("$.sensors[?sensor_code='Wind Direction'].chart_unit")
+        wind_direction_list_uom = jsonpath_wind_direction_uom.find(device)
+        self.setDriver('WINDDIR', wind_direction_list[0].value, True)
+        LOGGER.debug('Device Name: {}, Sensor Wind Direction: {} {}'.format(deviceName, wind_direction_list[0].value,
+                                                                            wind_direction_list_uom[0].value))
+
+        jsonpath_wind_speed = parse("$.sensors[?sensor_code='Wind Speed'].last_reading_value")
+        wind_speed_list = jsonpath_wind_speed.find(device)
+        jsonpath_wind_speed_uom = parse("$.sensors[?sensor_code='Wind Speed'].chart_unit")
+        wind_speed_list_uom = jsonpath_wind_speed_uom.find(device)
+        self.setDriver('SPEED', wind_speed_list[0].value, True)
+        LOGGER.debug('Device Name: {}, Sensor Wind Speed: {} {}'.format(deviceName, wind_speed_list[0].value,
+                                                                        wind_speed_list_uom[0].value))
+
+        jsonpath_feels_like = parse("$.sensors[?sensor_code='Feels Like'].last_reading_value")
+        feels_like_list = jsonpath_feels_like.find(device)
+
+        jsonpath_heat_index = parse("$.sensors[?sensor_code='Heat Index'].last_reading_value")
+        heat_index_list = jsonpath_heat_index.find(device)
+
+        if len(feels_like_list) > 0 and int(feels_like_list[0].value) > 0:
+            jsonpath_feels_like_uom = parse("$.sensors[?sensor_code='Feels Like'].chart_unit")
+            feels_like_list_uom = jsonpath_feels_like_uom.find(device)
+            self.setDriver('GV4', feels_like_list[0].value, True)
+            LOGGER.debug('Device Name: {}, Sensor Feels Like: {} {}'.format(deviceName, feels_like_list[0].value,
+                                                                            feels_like_list_uom[0].value))
+        elif len(heat_index_list) > 0 and int(heat_index_list[0].value) > 0:
+            jsonpath_heat_index_uom = parse("$.sensors[?sensor_code='Heat Index'].chart_unit")
+            heat_index_list_uom = jsonpath_heat_index_uom.find(device)
+            self.setDriver('GV4', heat_index_list[0].value, True)
+            LOGGER.debug('Device Name: {}, Sensor Heat Index: {} {}'.format(deviceName, heat_index_list[0].value,
+                                                                            heat_index_list_uom[0].value))
         else:
-            self.setDriver('GV4', temp, True)
+            self.setDriver('GV4', 0, True)
 
-        for sensor in device['wired_sensors']:
-            if sensor['sensor_code'] == 'LightningStrikeCnt':
-                lightningStrikeCnt = sensor['last_reading_value']
-                lightningStrikeCntUOM = sensor['chart_unit']
-                self.setDriver('GV5', lightningStrikeCnt, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'], lightningStrikeCnt,
-                                                               lightningStrikeCntUOM))
-            elif sensor['sensor_code'] == 'LightningLastStrikeDist':
-                lightningLastStrikeDist = sensor['last_reading_value']
-                lightningLastStrikeDistUOM = sensor['chart_unit']
-                self.setDriver('GV6', lightningLastStrikeDist, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'],
-                                                               lightningLastStrikeDist,
-                                                               lightningLastStrikeDistUOM))
-            elif sensor['sensor_code'] == 'LightningClosestStrikeDist':
-                lightningClosestStrikeDist = sensor['last_reading_value']
-                lightningClosestStrikeDistUOM = sensor['chart_unit']
-                self.setDriver('GV8', lightningClosestStrikeDist, True)
-                LOGGER.debug(
-                    'Device Name: {}, Sensor {}: {} {}'.format(deviceName, sensor['sensor_code'],
-                                                               lightningClosestStrikeDist,
-                                                               lightningClosestStrikeDistUOM))
+        jsonpath_rainfall = parse("$.sensors[?sensor_code='Rainfall'].last_reading_value")
+        rainfall_list = jsonpath_rainfall.find(device)
+        jsonpath_rainfall_uom = parse("$.sensors[?sensor_code='Rainfall'].chart_unit")
+        rainfall_list_uom = jsonpath_rainfall_uom.find(device)
+        self.setDriver('RAINRT', rainfall_list[0].value, True)
+        LOGGER.debug(
+            'Device Name: {}, Sensor Rainfall: {} {}'.format(deviceName, rainfall_list[0].value,
+                                                             rainfall_list_uom[0].value))
+
+        jsonpath_lightintensity = parse("$.sensors[?sensor_code='LightIntensity'].last_reading_value")
+        lightintensity_list = jsonpath_lightintensity.find(device)
+        jsonpath_lightintensity_uom = parse("$.sensors[?sensor_code='LightIntensity'].chart_unit")
+        lightintensity_list_uom = jsonpath_lightintensity_uom.find(device)
+        self.setDriver('LUMIN', lightintensity_list[0].value, True)
+        LOGGER.debug('Device Name: {}, Sensor LightIntensity: {} {}'.format(deviceName, lightintensity_list[0].value,
+                                                                            lightintensity_list_uom[0].value))
+
+        jsonpath_uvindex = parse("$.sensors[?sensor_code='UVIndex'].last_reading_value")
+        uvindex_list = jsonpath_uvindex.find(device)
+        jsonpath_uvindex_uom = parse("$.sensors[?sensor_code='UVIndex'].chart_unit")
+        uvindex_list_uom = jsonpath_uvindex_uom.find(device)
+        self.setDriver('UV', uvindex_list[0].value, True)
+        LOGGER.debug(
+            'Device Name: {}, Sensor UVIndex: {} {}'.format(deviceName, uvindex_list[0].value,
+                                                            uvindex_list_uom[0].value))
+
+        jsonpath_windspeedavg = parse("$.sensors[?sensor_code='WindSpeedAvg'].last_reading_value")
+        windspeedavg_list = jsonpath_windspeedavg.find(device)
+        jsonpath_windspeedavg_uom = parse("$.sensors[?sensor_code='WindSpeedAvg'].chart_unit")
+        windspeedavg_list_uom = jsonpath_windspeedavg_uom.find(device)
+        self.setDriver('GV7', windspeedavg_list[0].value, True)
+        LOGGER.debug('Device Name: {}, Sensor WindSpeedAvg: {} {}'.format(deviceName, windspeedavg_list[0].value,
+                                                                          windspeedavg_list_uom[0].value))
+
+        jsonpath_lightningStrikeCnt = parse("$.wired_sensors[?sensor_code='LightningStrikeCnt'].last_reading_value")
+        lightningStrikeCnt_list = jsonpath_lightningStrikeCnt.find(device)
+
+        if len(lightningStrikeCnt_list) > 0 and int(lightningStrikeCnt_list[0].value) > 0:
+            jsonpath_lightningStrikeCnt_uom = parse("$.sensors[?sensor_code='LightningStrikeCnt'].chart_unit")
+            lightningStrikeCnt_list_uom = jsonpath_lightningStrikeCnt_uom.find(device)
+            self.setDriver('GV5', lightningStrikeCnt_list[0].value, True)
+            LOGGER.debug(
+                'Device Name: {}, Sensor Lightning Strike Count: {} {}'.format(deviceName,
+                                                                               lightningStrikeCnt_list[0].value,
+                                                                               lightningStrikeCnt_list_uom[0].value))
+
+            jsonpath_lightningLastStrikeDist = parse(
+                "$.sensors[?sensor_code='LightningLastStrikeDist'].last_reading_value")
+            lightningLastStrikeDist_list = jsonpath_lightningLastStrikeDist.find(device)
+            jsonpath_lightningLastStrikeDist_uom = parse("$.sensors[?sensor_code='LightningLastStrikeDist'].chart_unit")
+            lightningLastStrikeDist_list_uom = jsonpath_lightningLastStrikeDist_uom.find(device)
+            self.setDriver('GV6', lightningLastStrikeDist_list[0].value, True)
+            LOGGER.debug('Device Name: {}, Sensor Lightning Last Strike Distance: {} {}'.format(deviceName,
+                                                                                                lightningLastStrikeDist_list[
+                                                                                                    0].value,
+                                                                                                lightningLastStrikeDist_list_uom[
+                                                                                                    0].value))
+
+            jsonpath_lightningClosestStrikeDist = parse(
+                "$.sensors[?sensor_code='LightningClosestStrikeDist'].last_reading_value")
+            lightningClosestStrikeDist_list = jsonpath_lightningClosestStrikeDist.find(device)
+            jsonpath_lightningClosestStrikeDist_uom = parse(
+                "$.sensors[?sensor_code='LightningClosestStrikeDist'].chart_unit")
+            lightningClosestStrikeDist_list_uom = jsonpath_lightningClosestStrikeDist_uom.find(device)
+            self.setDriver('GV8', lightningClosestStrikeDist_list[0].value, True)
+            LOGGER.debug('Device Name: {}, Sensor Lightning Closest Strike Distance: {} {}'.format(deviceName,
+                                                                              lightningClosestStrikeDist_list[0].value,
+                                                                              lightningClosestStrikeDist_list_uom[
+                                                                                  0].value))
+        else:
+            self.setDriver('GV5', 0, True)
+            self.setDriver('GV6', 0, True)
+            self.setDriver('GV8', 0, True)
 
         try:
             if deviceLastCheckIn is not None and deviceLastCheckIn != '':
@@ -178,7 +210,7 @@ class AcuriteAtlasNode(udi_interface.Node):
                {'driver': 'RAINRT', 'value': 0, 'uom': '120'},
                {'driver': 'LUMIN', 'value': 0, 'uom': '36'},
                {'driver': 'UV', 'value': 0, 'uom': '71'},
-               {'driver': 'GV5', 'value': 0, 'uom': '0'},
+               {'driver': 'GV5', 'value': 0, 'uom': '56'},
                {'driver': 'GV6', 'value': 0, 'uom': '116'},
                {'driver': 'GV8', 'value': 0, 'uom': '116'},
                {'driver': 'GV7', 'value': 0, 'uom': '48'}]
