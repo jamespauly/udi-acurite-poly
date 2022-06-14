@@ -21,3 +21,4 @@ Currently supports AcuRite Access® for Remote Monitoring and any device that ca
 ### Requirements
 Here are the python modules required to use this node server:<BR>
 * requests
+* jsonpath-ng
