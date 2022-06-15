@@ -147,7 +147,7 @@ class AcuriteAtlasNode(udi_interface.Node):
         lightningStrikeCnt_list = jsonpath_lightningStrikeCnt.find(device)
 
         if len(lightningStrikeCnt_list) > 0 and int(lightningStrikeCnt_list[0].value) > 0:
-            jsonpath_lightningStrikeCnt_uom = parse("$.sensors[?sensor_code='LightningStrikeCnt'].chart_unit")
+            jsonpath_lightningStrikeCnt_uom = parse("$.wired_sensors[?sensor_code='LightningStrikeCnt'].chart_unit")
             lightningStrikeCnt_list_uom = jsonpath_lightningStrikeCnt_uom.find(device)
             self.setDriver('GV5', lightningStrikeCnt_list[0].value, True)
             LOGGER.debug(
@@ -156,9 +156,9 @@ class AcuriteAtlasNode(udi_interface.Node):
                                                                                lightningStrikeCnt_list_uom[0].value))
 
             jsonpath_lightningLastStrikeDist = parse(
-                "$.sensors[?sensor_code='LightningLastStrikeDist'].last_reading_value")
+                "$.wired_sensors[?sensor_code='LightningLastStrikeDist'].last_reading_value")
             lightningLastStrikeDist_list = jsonpath_lightningLastStrikeDist.find(device)
-            jsonpath_lightningLastStrikeDist_uom = parse("$.sensors[?sensor_code='LightningLastStrikeDist'].chart_unit")
+            jsonpath_lightningLastStrikeDist_uom = parse("$.wired_sensors[?sensor_code='LightningLastStrikeDist'].chart_unit")
             lightningLastStrikeDist_list_uom = jsonpath_lightningLastStrikeDist_uom.find(device)
             self.setDriver('GV6', lightningLastStrikeDist_list[0].value, True)
             LOGGER.debug('Device Name: {}, Sensor Lightning Last Strike Distance: {} {}'.format(deviceName,
@@ -168,10 +168,10 @@ class AcuriteAtlasNode(udi_interface.Node):
                                                                                                     0].value))
 
             jsonpath_lightningClosestStrikeDist = parse(
-                "$.sensors[?sensor_code='LightningClosestStrikeDist'].last_reading_value")
+                "$.wired_sensors[?sensor_code='LightningClosestStrikeDist'].last_reading_value")
             lightningClosestStrikeDist_list = jsonpath_lightningClosestStrikeDist.find(device)
             jsonpath_lightningClosestStrikeDist_uom = parse(
-                "$.sensors[?sensor_code='LightningClosestStrikeDist'].chart_unit")
+                "$.wired_sensors[?sensor_code='LightningClosestStrikeDist'].chart_unit")
             lightningClosestStrikeDist_list_uom = jsonpath_lightningClosestStrikeDist_uom.find(device)
             self.setDriver('GV8', lightningClosestStrikeDist_list[0].value, True)
             LOGGER.debug('Device Name: {}, Sensor Lightning Closest Strike Distance: {} {}'.format(deviceName,
